@@ -1,0 +1,27 @@
+.main-text {
+    color: black;
+}
+
+.secondary-text {
+    color: gray;
+}
+
+.main-text-hover {
+    color: black;
+}
+
+.main-text-hover:hover {
+    color: gray;    
+}
+
+.white-text {
+    color: white;
+}
+
+.white-text-hover {
+    color: white !important;    
+}
+
+.white-text-hover:hover {
+    color: red !important;    
+}
