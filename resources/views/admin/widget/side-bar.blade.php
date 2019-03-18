@@ -4,7 +4,7 @@
             <a href="{{ url('admin/create') }}" class="form-control">Creat New Post</a>
         </div>
         <div class="form-group">
-            <a href="" class="form-control">Hight light Posts</a>
+            <a href="{{ url('admin/tag') }}" class="form-control">Post Tags</a>
         </div>
         <div class="form-group">
             <a href="" class="form-control">Hot Posts</a>

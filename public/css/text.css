@@ -25,3 +25,7 @@
 .white-text-hover:hover {
     color: red !important;    
 }
+
+.red-text {
+    color: red;
+}
