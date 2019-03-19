@@ -36,12 +36,19 @@
     <script>
         var removePostTag;
         var openCreatePost;
+        var openCreateTag;
         $(document).ready(function() {
-            // Create tag
+            // Create post
             //
             //
             openCreatePost = function() {
                 window.location.href = "/admin/post/create";
+            }
+            // Create tag
+            //
+            //
+            openCreateTag = function() {
+                window.location.href = "/admin/tag/create";
             }
             $('#level').change(function() {
                 var level = $(this).children("option:selected").val();
