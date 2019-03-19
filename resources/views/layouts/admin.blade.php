@@ -34,16 +34,35 @@
 
 <body style="min-width: 1000px;">
     <script>
-        var removePostTag;
         var openCreatePost;
+        var deletePost;
+        var removePostTag;
         var openCreateTag;
         $(document).ready(function() {
+            ////////////////////////////////////////////////
+            // POST
+            ////////////////////////////////////////////////
             // Create post
             //
             //
             openCreatePost = function() {
                 window.location.href = "/admin/post/create";
             }
+            deletePost = function($id) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: 'api/admin/post/'.concat($id),
+                    success: function( msg ) {
+                        var objJSON = JSON.parse(msg);
+                        if (objJSON.status == 'success') {
+                            $('#post-'.concat($id)).remove();
+                        }
+                    }
+                });
+            }
+            ////////////////////////////////////////////////
+            // TAG
+            ////////////////////////////////////////////////
             // Create tag
             //
             //
@@ -127,11 +146,11 @@
             removePostTag = function($id) { 
                 $.ajax({
                     type: "DELETE",
-                    url: "/api/admin/post/tag/remove/".concat($id),                
+                    url: "/api/admin/post/tag/".concat($id),                
                     success: function( msg ) {
                         var objJSON = JSON.parse(msg);
                         if (objJSON.status == 'success') {
-                            $('#'.concat($id)).remove();
+                            $('#tag-'.concat($id)).remove();
                         }
                     }
                 });

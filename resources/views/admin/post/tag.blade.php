@@ -5,7 +5,7 @@
         <div class="card-header">{{$post->name}}</div>
         <div class="card-body">
             @foreach ($tags as $tag)
-                <div class="d-flex justify-content-between align-items-center" id="{{$tag->id}}" style="border: 1px solid black; padding: 5px;">
+                <div class="d-flex justify-content-between align-items-center" id="{{'tag-' . $tag->id}}" style="border: 1px solid black; padding: 5px;">
                     <a href="{{url($tag->getRoute())}}">{{$tag->getName()}}</a>
                     <button class="btn btn-primary" onclick="removePostTag({{$tag->id}})">Remove</button>
                 </div>

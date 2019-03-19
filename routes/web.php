@@ -20,10 +20,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/', 'Admin\AdminController@getHome')->middleware('admin');
     Route::get('/logout', 'Admin\AdminController@logout');
     Route::prefix('post')->group(function () {
-        Route::get('create', 'Admin\AdminController@showCreatePostForm')->middleware('admin');
-        Route::post('create', 'Admin\AdminController@createPost')->middleware('admin');
-        Route::get('{id}/tags', 'Admin\AdminController@showPostTags')->middleware('admin');
-        Route::post('{id}/tags', 'Admin\AdminController@addPostTag')->middleware('admin');
+        Route::get('create', 'Admin\PostController@showCreatePostForm')->middleware('admin');
+        Route::post('create', 'Admin\PostController@createPost')->middleware('admin');
+        Route::get('{id}/tags', 'Admin\PostController@showPostTags')->middleware('admin');
+        Route::post('{id}/tags', 'Admin\PostController@addPostTag')->middleware('admin');
     });
     Route::prefix('tag')->group(function() {
         Route::get('/', 'Admin\TagController@getTagHome')->middleware('admin');

@@ -19,5 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('admin')->group(function() {
     Route::get('tag/childs/{level}/{id}', "Admin\TagController@getTagChilds");
-    Route::delete('post/tag/remove/{id}', "Admin\AdminController@removePostTag");
+    Route::prefix('post')->group(function() {
+        Route::delete('{id}','Admin\PostController@deletePost');
+        Route::delete('tag/{id}', "Admin\PostController@removePostTag");
+    });
 });

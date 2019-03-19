@@ -22,7 +22,7 @@
                     <th>Delete</th>
                 </tr>
                 @foreach ($posts as $post)
-                <tr style="min-width: 700px;">
+                <tr id="{{'post-' . $post->id}}" style="min-width: 700px;">
                     <td>{{$post->id}}</td>
                     <td style="max-width: 500px;">{{$post->name}}</td>
                     <td><a href="{{url('admin/post/' . $post->id . '/tags')}}">View</a></td>
@@ -30,8 +30,8 @@
                     <td>{{$post->view_count}}</td>
                     <td><input type="checkbox" style="width:30px; height:30px;" {{$post->isHot()}}></td>
                     <td><input type="checkbox" style="width:30px; height:30px;" {{$post->isHightLight()}}></td>
-                    <td></td>
-                    <td></td>
+                    <td><button class="btn btn-primary">Apply</button></td>
+                    <td><button class="btn btn-primary" onclick="deletePost({{$post->id}})">Delete</button></td>
                 </tr>
                 @endforeach
             </table>
