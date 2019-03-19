@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Model\Tag;
+namespace App\Model\Response;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model {
-    //
+class StatusResponse extends Model {
     protected $fillable = [
-        'name', 'childs'
+        'status'
     ];
 }

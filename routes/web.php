@@ -19,14 +19,17 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', 'Admin\AdminController@login');
     Route::get('/', 'Admin\AdminController@getHome')->middleware('admin');
     Route::get('/logout', 'Admin\AdminController@logout');
-    Route::get('/create', 'Admin\AdminController@showCreatePostForm')->middleware('admin');
-    Route::post('/create', 'Admin\AdminController@createPost')->middleware('admin');
+    Route::prefix('post')->group(function () {
+        Route::get('create', 'Admin\AdminController@showCreatePostForm')->middleware('admin');
+        Route::post('create', 'Admin\AdminController@createPost')->middleware('admin');
+        Route::get('{id}/tags', 'Admin\AdminController@showPostTags')->middleware('admin');
+        Route::post('{id}/tags', 'Admin\AdminController@addPostTag')->middleware('admin');
+    });
     Route::prefix('tag')->group(function() {
         Route::get('/', 'Admin\TagController@getTagHome')->middleware('admin');
         Route::get('/create', 'Admin\TagController@getCreateTag')->middleware('admin');
         Route::post('/create', 'Admin\TagController@createTag')->middleware('admin');
     });
-    // Route::get('/post/{id}', )
 });
 
 Route::post('upload', 'Common\UploadController@uploadImage');

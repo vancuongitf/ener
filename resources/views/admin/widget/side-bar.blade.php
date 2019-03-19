@@ -1,9 +1,6 @@
 <div class="card card-default" style="margin: 20px;">
     <div class="card-body">
         <div class="form-group">
-            <a href="{{ url('admin/create') }}" class="form-control">Creat New Post</a>
-        </div>
-        <div class="form-group">
             <a href="{{ url('admin/tag') }}" class="form-control">Post Tags</a>
         </div>
         <div class="form-group">

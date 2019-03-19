@@ -34,11 +34,11 @@
     @include('admin.widget.header')
     <div class="row row-eq-height content-full-size" style="padding: 0px; margin: 0px;">
         <div class="col-3 content-full-size" style="padding: 0px; margin: 0px;">
-    @include('admin.widget.side-bar')
+            @include('admin.widget.side-bar')
         </div>
         <div class="col-9 content-full-size" style="padding: 0px; margin: 0px;">
             <div class="row" style="font-size: 1.5rem; padding: 0px; margin: 0px;">
-                <div class="col-8">
+                <div class="col-12">
                     <div class="card card-default" style="margin: 20px;">
                         <div class="card-header">Create New Post</div>
                         <div class="card-body">
@@ -96,9 +96,6 @@
               height: 500
          });
         $('#title').keyup(function() {
-            // var markupStr = $('#summernote').summernote('code');
-            // $('#view').html(markupStr);
-            console.log($('#title').val());
             $('#route').val(genUrl($('#title').val()));        
         });
         function genUrl(alias) {
