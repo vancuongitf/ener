@@ -18,18 +18,7 @@ class PostController extends Controller {
     }
 
     public function createPost(CreatePostRequest $request) {
-        $file = $request->file('image');
-        $filename = "";
-        $uploaded = false;
-        if ($file != null) {
-            $destinationPath = 'file_storage/';
-            $originalFile = $file->getClientOriginalName();
-            $filename=md5(strtotime(date('Y-m-d-H:isa')).$originalFile).".jpg";
-            $uploaded = $file->move($destinationPath, $filename);
-        }
-        if (!$uploaded) {
-            $filename = "";
-        }
+        $image = $this->saveImage($request->file('image'));
         $title = $request->get('title');
         $description = "";
         if ($request->get('description') != null) {
@@ -37,17 +26,18 @@ class PostController extends Controller {
         }
         $html = $request->get('summernote');
         $route = $request->get('route');
-        date_default_timezone_set("Asia/Bangkok");
-        $t=time();
         $post = Post::create([
             'name' => $title,
             'description' => $description,
-            'image' => $filename,
+            'image' => $image,
             'content' => $html,
             'route' =>  $route,
-            'posted_at' => $t,
         ]);
-        return redirect('admin/post/' . $post->id . '/tags');
+        if ($post->id > 0) {
+            return redirect()->back()->withErrors(['message' => 'Create post fail. Please try later!']);            
+        } else {
+            return redirect('admin/post/' . $post->id . '/tags');
+        }
     }
 
     public function showPostInfo() {
@@ -55,7 +45,7 @@ class PostController extends Controller {
         if ($post == null) {
             abort(404);
         }
-        return view('admin.post.edit')->with('post', $post)->with('edit');
+        return view('admin.post.edit')->with('post', $post);
     }
 
     public function getPostInfo() {
@@ -63,11 +53,33 @@ class PostController extends Controller {
     }
 
     public function updatePostInfo(CreatePostRequest $request) {
-        return redirect()->back();
+        $newImage = Post::where('id', $request->input('id'))->first()->image;
+        switch($request->input('image_control')) {
+            case 'REMOVE': 
+                $newImage = "";
+                break;
+            case 'CHANGE': 
+                $newImage = $this->saveImage($request->file('image'));
+                break;
+        }
+        $post = Post::where('id', $request->input('id'))
+            ->update([
+                'name' => $request->input('title'),
+                'route' => $request->input('route'),
+                'description' => $request->input('description'),
+                'content' => $request->input('summernote'),
+                'image' => $newImage
+            ]);
+        if ($post > 0) {
+            return redirect()->back()->withErrors(['message' => 'Update post info success!']);
+        } else {
+            return redirect()->back()->withErrors(['message' => 'Update post info fail!']);
+        }
     }
 
     public function deletePost() {
         $id = Route::current()->parameter('id');
+        PostTag::where('post_id', $id)->delete();
         $deleteCount = Post::where('id', $id)->delete();
         if ($deleteCount > 0) {
             return json_encode(new StatusResponse([
@@ -124,6 +136,22 @@ class PostController extends Controller {
             return json_encode(new StatusResponse([
                 'status' => 'fail'
             ]));
+        }
+    }
+
+    private function saveImage($file) {
+        $filename = "";
+        $uploaded = false;
+        if ($file != null) {
+            $destinationPath = 'file_storage/';
+            $originalFile = $file->getClientOriginalName();
+            $filename=md5(strtotime(date('Y-m-d-H:isa')).$originalFile).".jpg";
+            $uploaded = $file->move($destinationPath, $filename);
+        }
+        if ($uploaded) {
+            return $filename;
+        } else {
+            return "";
         }
     }
 }

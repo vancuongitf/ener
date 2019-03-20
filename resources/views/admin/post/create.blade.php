@@ -71,6 +71,9 @@
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
                         @csrf 
+                        @if($errors->first('message'))
+                            <p class="red-text" style="font-size: 1rem;">{{$errors->first('message')}}</p>
+                        @endif
                         <div class="form-group">
                             <input id="title" name="title" type="text" placeholder="Input post's title" class="form-control" value="{{old('title')}}">                                    
                             @if ($errors->first('title'))
