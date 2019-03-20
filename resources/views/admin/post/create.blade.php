@@ -1,4 +1,68 @@
 @extends('layouts.admin') 
+@section('script')
+    <script>
+        function showImageTo(input, $target) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $($target).attr('src', e.target.result);
+                    $('#img_create_post_image').show();
+                    $('#btn_remove_image').show();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function removeImage() {
+            $('#img_create_post_image').hide();
+            var imgChoose = $('#create_post_image');
+            imgChoose.replaceWith(imgChoose.val('').clone(true));
+            $('#btn_remove_image').hide();
+        }
+        $(document).ready(function() {
+            $('#btn_remove_image').hide();
+            $("#viewHTML").click( function() {
+                var markupStr = $('#summernote').summernote('code');
+                $('#view').html(markupStr);
+                }
+            );
+            $("#btn-insert-iamge").click( function() {
+                var imageTagStart = "<div style=\"text-align:center;\"><img style=\"max-width: 100%; display: block; margin-left: auto; margin-right: auto;\" src=\"";
+                var htmlContent = imageTagStart.concat($("#image-address").val()).concat("\"><i style=\"color: blue; font-size: 15px;\">").concat($("#image-description").val()).concat("</i></div><br>")
+                var markupStr = $('#summernote').summernote('code');
+                $("#summernote").summernote('code', markupStr.concat(htmlContent));
+            });
+            $("#summernote").summernote({
+                placeholder: 'Input post\' content',
+                tabsize: 2,
+                height: 500
+            });
+            $('#title').keyup(function() {
+                $('#route').val(genUrl($('#title').val()));        
+            });
+            function genUrl(alias) {
+                var str = alias;
+                str = str.toLowerCase();
+                str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+                str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+                str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+                str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+                str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+                str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+                str = str.replace(/đ/g,"d");
+                str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+                str = str.replace(/ + /g," ");
+                str = str.trim();
+                while(str.includes("  ") > 0) {
+                    str = str/replace("  ", " ");
+                }
+                while(str.includes(" ") > 0) {
+                    str = str.replace(" ","-");
+                }
+                return str.concat(".html");
+            }
+        });
+    </script>   
+@endsection
 @section('content')
 <div class="row" style="font-size: 1.5rem; padding: 0px; margin: 0px;">
         <div class="col-12">
@@ -23,14 +87,17 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <input class="form-control" id="create_post_image" type="file" name="image" accept="image/*" onchange="readURL(this);"/>
-                            <img id="create_post_image" style="max-width:100%; margin-top: 20px;" src="" alt="">
+                            <input class="form-control" id="create_post_image" type="file" name="image" accept="image/*" onchange="showImageTo(this, '#img_create_post_image');"/>
                         </div>
+                        <div class="width: 100%">
+                            <div id="btn_remove_image" class="btn btn-primary" onclick="removeImage()">Remove Image</div>
+                        </div>
+                        <img id="img_create_post_image" style="max-width:100%; margin-top: 20px;" src="" alt="">
                         <div class="form-group">
                             <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Input post's description">{{old('description')}}</textarea>
                         </div>
                         <div class="form-group">
-                        <textarea name="summernote" id="summernote" cols="30" rows="10" class="form-control" placeholder="Input post's content">{{old('summernote')}}</textarea>                                    
+                        <textarea name="summernote" style="margin-top:20px;" id="summernote" cols="30" rows="10" class="form-control" placeholder="Input post's content">{{old('summernote')}}</textarea>                                    
                         @if ($errors->first('summernote'))
                             <p class="red-text" style="font-size: 1rem;">Post's content is required!</p>
                         @endif

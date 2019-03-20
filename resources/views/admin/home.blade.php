@@ -1,4 +1,23 @@
 @extends('layouts.admin') 
+@section('script')
+    <script>
+        function openCreatePost() {
+                window.location.href = "/admin/post/create";
+        }
+        function deletePost($id) {
+            $.ajax({
+                type: 'DELETE',
+                url:  "{{url('/api/admin/post/')}}".concat("/", $id),
+                success: function( msg ) {
+                    var objJSON = JSON.parse(msg);
+                    if (objJSON.status == 'success') {
+                        $('#post-'.concat($id)).remove();
+                    }
+                }
+            });
+        }
+    </script>
+@endsection
 @section('content')
 <div class="content-full-size">
     <div class="card card-default" style="margin: 20px;">

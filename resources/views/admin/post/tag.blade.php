@@ -1,4 +1,53 @@
 @extends('layouts.admin') 
+@section('script')
+    <script>
+        var removePostTag;
+        $(document).ready(function() {
+            $('#tag_level_1').change( function() {
+                var selectedTag = $(this).children("option:selected").val();
+                $('#tag_level_2').html("<option disabled selected value>Tag Level 2</option>");
+                $.ajax({
+                    type: "GET",
+                    url: "/api/admin/tag/childs/1/".concat(selectedTag),                
+                    success: function( msg ) {
+                        var objJSON = JSON.parse(msg);
+                        var htmlContent = "";
+                        objJSON.forEach(element => {
+                            $('#tag_level_2').append(htmlContent.concat('<option value="', element.id, '">' , element.name, '</option>'));
+                        });
+                    }
+                });
+            });
+            $('#tag_level_2').change( function() {
+                var selectedTag = $(this).children("option:selected").val();
+                $('#tag_level_3').html("<option disabled selected value>Tag Level 3</option>");
+                $.ajax({
+                    type: "GET",
+                    url: "/api/admin/tag/childs/2/".concat(selectedTag),                
+                    success: function( msg ) {
+                        var objJSON = JSON.parse(msg);
+                        var htmlContent = "";
+                        objJSON.forEach(element => {
+                            $('#tag_level_3').append(htmlContent.concat('<option value="', element.id, '">' , element.name, '</option>'));
+                        });
+                    }
+                });
+            });
+            removePostTag = function($id) { 
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/admin/post/tag/".concat($id),                
+                    success: function( msg ) {
+                        var objJSON = JSON.parse(msg);
+                        if (objJSON.status == 'success') {
+                            $('#tag-'.concat($id)).remove();
+                        }
+                    }
+                });
+            };
+        });
+    </script>
+@endsection
 @section('content')
 <div style="padding: 20px; width: 100%; box-sizing: border-box;">
     <div class="card card-default">

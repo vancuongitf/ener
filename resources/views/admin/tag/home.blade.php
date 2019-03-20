@@ -1,16 +1,20 @@
 @extends('layouts.admin')
-<style type="text/css">
-    .row div {
-        /* border-bottom: 1px solid black; */
-    }
-</style>
-
+@section('script')
+    <script>
+        var openCreateTag;        
+        $(document).ready(function() {
+            openCreateTag = function() {
+                window.location.href = "/admin/tag/create";
+            }
+        });
+    </script>
+@endsection
 @section('content')
 <div class="card card-default" style="margin: 20px;">
     <div class="card-header">
         <div class="d-flex justify-content-between" style="width:100%">
             <div style="font-size: 2rem">Post Tags</div>
-            <button class="btn btn-primary" style="text-align:center;" onclick="openCreateTag()">Create New Post</button>
+            <button class="btn btn-primary" style="text-align:center;" onclick="openCreateTag()">Create New Tag</button>
         </div>
     </div>
     <div class="card-body">

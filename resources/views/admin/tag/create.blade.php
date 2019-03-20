@@ -1,4 +1,57 @@
 @extends('layouts.admin') 
+@section('script')
+    <script>
+        function showImageTo(input, $target) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $($target).attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $(document).ready(function() {
+            $('#level').change(function() {
+                var level = $(this).children("option:selected").val();
+                $('#level_1_parent').attr("disabled", "disabled");
+                $('#level_2_parent').attr("disabled", "disabled");
+                switch(level) {
+                    case '1':
+                        console.log($('#level_1_parent').find(":selected").text());
+                        $('#level_1_parent').prop('selectedIndex',0);
+                        $('#level_2_parent').prop('selectedIndex',0);                        
+                        break;
+                    
+                    case '2':
+                        $('#level_1_parent').removeAttr("disabled");
+                        $('#level_2_parent').prop('selectedIndex',0);                        
+                        break;
+
+                    case '3':
+                        $('#level_1_parent').removeAttr("disabled");
+                        $('#level_2_parent').removeAttr("disabled");
+                        break;
+                }
+            });
+            $('#level_1_parent').change(function() {
+                var selectedTag = $(this).children("option:selected").val();
+                $('#level_2_parent').html("<option disabled selected value>Tag level 2 parent</option>");
+                $.ajax({
+                    type: "GET",
+                    url: "/api/admin/tag/childs/1/".concat(selectedTag),                
+                    success: function( msg ) {
+                        var objJSON = JSON.parse(msg);
+                        var htmlContent = "";
+                        $('#level_2_parent').html("<option disabled selected value>Tag level 2 parent</option>");
+                        objJSON.forEach(element => {
+                            $('#level_2_parent').append(htmlContent.concat('<option value="', element.id, '">' , element.name, '</option>'));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
 @section('content')
 <div class="card card-default" style="margin: 20px;">
     <div class="card-header">

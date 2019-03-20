@@ -1,7 +1,33 @@
 @extends('layouts.admin')
 @section('script')
 <script>
-    $('#getPostInfo').ready(function() {
+    function showImageTo(input, $target) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $($target).attr('src', e.target.result);
+                $('#image_control').val('CHANGE');   
+                $('#img_edit_post_image').show();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function removeImage() {
+        $('#img_edit_post_image').hide();
+        $('#image_control').val('REMOVE');
+        var imgChoose = $('#edit_post_image');
+        imgChoose.replaceWith(imgChoose.val('').clone(true));
+    }
+
+    function dontChangeImage() {
+        $('#img_edit_post_image').show();
+        $('#image_control').val('NOTHING');
+        $('#img_edit_post_image').attr('src', "{{url('file_storage/' . $post->image)}}");
+        var imgChoose = $('#edit_post_image');
+        imgChoose.replaceWith(imgChoose.val('').clone(true));
+    }
+
+    $(document).ready(function() {
         if ($('#getPostInfo').val() == "GET") {
             $('#title').val("{{$post->name}}");
             $('#route').val("{{$post->route}}");
@@ -20,6 +46,7 @@
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
                         @csrf 
+                        <input id="image_control" type="hidden" name="image_control" value="nothing">
                         @if ($post)
                             <input id="postId" name="id" type="hidden" name="post_id" value="{{$post->id}}"> 
                         @endif
@@ -40,11 +67,15 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <input class="form-control" id="edit_post_image" type="file" name="image" accept="image/*" onchange="readURL(this);"/>
-                            <img id="post_image" style="max-width:100%; margin-top: 20px;" src="<?php if ($post != null) echo url('file_storage/' . $post->image); ?>" alt="">
+                            <input class="form-control" id="edit_post_image" type="file" name="image" accept="image/*" onchange="showImageTo(this, '#img_edit_post_image');"/>
                         </div>
+                        <div class="width: 100%">
+                            <div id="btn_remove_image" class="btn btn-primary" onclick="removeImage()">Remove Image</div>
+                            <div id="btn_dont_change_image" class="btn btn-primary" onclick="dontChangeImage()">Don't Change Image</div>                            
+                        </div>
+                        <img id="img_edit_post_image" style="max-width:100%; margin-top: 20px;" src="{{url('file_storage/' . $post->image)}}" alt="">
                         <div class="form-group">
-                            <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Input post's description">{{old('description')}}</textarea>
+                            <textarea class="form-control" style="margin-top:20px;" name="description" id="description" cols="30" rows="5" placeholder="Input post's description">{{old('description')}}</textarea>
                         </div>
                         <div class="form-group">
                         <textarea name="summernote" id="summernote" cols="30" rows="10" class="form-control" placeholder="Input post's content">{{old('summernote')}}</textarea>                                    
