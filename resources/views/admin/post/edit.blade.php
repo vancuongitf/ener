@@ -1,4 +1,17 @@
-@extends('layouts.admin') 
+@extends('layouts.admin')
+@section('script')
+<script>
+    $('#getPostInfo').ready(function() {
+        if ($('#getPostInfo').val() == "GET") {
+            $('#title').val("{{$post->name}}");
+            $('#route').val("{{$post->route}}");
+            $('#description').val("{{$post->description}}");
+            var str = '<?php echo $post->content;?>';
+            $('#summernote').summernote('code', str);
+        }
+    });
+</script>    
+@endsection 
 @section('content')
 <div class="row" style="font-size: 1.5rem; padding: 0px; margin: 0px;">
         <div class="col-12">
@@ -7,6 +20,10 @@
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
                         @csrf 
+                        @if ($post)
+                            <input id="postId" name="id" type="hidden" name="post_id" value="{{$post->id}}"> 
+                        @endif
+                        <input type="hidden" name="getPostInfo" id="getPostInfo" value="GET">
                         <div class="form-group">
                             <input id="title" name="title" type="text" placeholder="Input post's title" class="form-control" value="{{old('title')}}">                                    
                             @if ($errors->first('title'))
@@ -23,8 +40,8 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <input class="form-control" id="create_post_image" type="file" name="image" accept="image/*" onchange="readURL(this);"/>
-                            <img id="create_post_image" style="max-width:100%; margin-top: 20px;" src="" alt="">
+                            <input class="form-control" id="edit_post_image" type="file" name="image" accept="image/*" onchange="readURL(this);"/>
+                            <img id="post_image" style="max-width:100%; margin-top: 20px;" src="<?php if ($post != null) echo url('file_storage/' . $post->image); ?>" alt="">
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Input post's description">{{old('description')}}</textarea>

@@ -24,7 +24,7 @@
                 @foreach ($posts as $post)
                 <tr id="{{'post-' . $post->id}}" style="min-width: 700px;">
                     <td>{{$post->id}}</td>
-                    <td style="max-width: 500px;">{{$post->name}}</td>
+                    <td style="max-width: 500px;"><a href="{{"admin/post/info/" . $post->id}}">{{$post->name}}</a></td>
                     <td><a href="{{url('admin/post/' . $post->id . '/tags')}}">View</a></td>
                     <td>{{$post->created_at}}</td>
                     <td>{{$post->view_count}}</td>

@@ -20,6 +20,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/', 'Admin\AdminController@getHome')->middleware('admin');
     Route::get('/logout', 'Admin\AdminController@logout');
     Route::prefix('post')->group(function () {
+        Route::get('info/{id}', 'Admin\PostController@showPostInfo');
+        Route::post('info/{id}', 'Admin\PostController@updatePostInfo');
         Route::get('create', 'Admin\PostController@showCreatePostForm')->middleware('admin');
         Route::post('create', 'Admin\PostController@createPost')->middleware('admin');
         Route::get('{id}/tags', 'Admin\PostController@showPostTags')->middleware('admin');

@@ -24,12 +24,15 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+    
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
 </head>
 
 <body style="min-width: 1000px;">
@@ -38,6 +41,15 @@
         var deletePost;
         var removePostTag;
         var openCreateTag;
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#post_image').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
         $(document).ready(function() {
             ////////////////////////////////////////////////
             // POST
@@ -59,6 +71,46 @@
                         }
                     }
                 });
+            }
+            $("#viewHTML").click( function() {
+                var markupStr = $('#summernote').summernote('code');
+                $('#view').html(markupStr);
+                }
+            );
+            $("#btn-insert-iamge").click( function() {
+                var imageTagStart = "<div style=\"text-align:center;\"><img style=\"max-width: 100%; display: block; margin-left: auto; margin-right: auto;\" src=\"";
+                var htmlContent = imageTagStart.concat($("#image-address").val()).concat("\"><i style=\"color: blue; font-size: 15px;\">").concat($("#image-description").val()).concat("</i></div><br>")
+                var markupStr = $('#summernote').summernote('code');
+                $("#summernote").summernote('code', markupStr.concat(htmlContent));
+            });
+            $("#summernote").summernote({
+                placeholder: 'Input post\' content',
+                tabsize: 2,
+                height: 500
+            });
+            $('#title').keyup(function() {
+                $('#route').val(genUrl($('#title').val()));        
+            });
+            function genUrl(alias) {
+                var str = alias;
+                str = str.toLowerCase();
+                str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+                str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+                str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+                str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+                str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+                str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+                str = str.replace(/đ/g,"d");
+                str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+                str = str.replace(/ + /g," ");
+                str = str.trim();
+                while(str.includes("  ") > 0) {
+                    str = str/replace("  ", " ");
+                }
+                while(str.includes(" ") > 0) {
+                    str = str.replace(" ","-");
+                }
+                return str.concat(".html");
             }
             ////////////////////////////////////////////////
             // TAG
@@ -157,6 +209,7 @@
             };
         });
     </script>
+    @yield('script')
     @include('admin.widget.header')
     <div class="row row-eq-height content-full-size" style="padding: 0px; margin: 0px;">
         <div class="col-3 content-full-size" style="padding: 0px; margin: 0px;">

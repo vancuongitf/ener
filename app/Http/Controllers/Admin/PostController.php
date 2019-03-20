@@ -10,37 +10,60 @@ use App\Model\Tag\PostTag;
 use App\Model\Tag\TagLevel1;
 use App\Model\Response\StatusResponse;
 use App\Http\Requests\Admin\Post\AddTagRequest;
+use App\Http\Requests\Admin\Post\CreatePostRequest;
 
 class PostController extends Controller {
     public function showCreatePostForm() {
         return view('admin.post.create');
     }
 
-    public function createPost(Request $request) {
+    public function createPost(CreatePostRequest $request) {
         $file = $request->file('image');
-        $destinationPath = 'file_storage/';
-        $originalFile = $file->getClientOriginalName();
-        $filename=md5(strtotime(date('Y-m-d-H:isa')).$originalFile).".jpg";
-        $uploaded = $file->move($destinationPath, $filename);
-        if ($uploaded) {
-            $title = $request->get('title');
-            $description = $request->get('description');
-            $html = $request->get('summernote');
-            $route = $request->get('route');
-            date_default_timezone_set("Asia/Bangkok");
-            $t=time();
-            $post = Post::create([
-                'name' => $title,
-                'description' => $description,
-                'image' => $filename,
-                'content' => $html,
-                'route' =>  $route,
-                'posted_at' => $t,
-            ]);
-        } else {
-            
+        $filename = "";
+        $uploaded = false;
+        if ($file != null) {
+            $destinationPath = 'file_storage/';
+            $originalFile = $file->getClientOriginalName();
+            $filename=md5(strtotime(date('Y-m-d-H:isa')).$originalFile).".jpg";
+            $uploaded = $file->move($destinationPath, $filename);
         }
+        if (!$uploaded) {
+            $filename = "";
+        }
+        $title = $request->get('title');
+        $description = "";
+        if ($request->get('description') != null) {
+            $description = $request->get('description');
+        }
+        $html = $request->get('summernote');
+        $route = $request->get('route');
+        date_default_timezone_set("Asia/Bangkok");
+        $t=time();
+        $post = Post::create([
+            'name' => $title,
+            'description' => $description,
+            'image' => $filename,
+            'content' => $html,
+            'route' =>  $route,
+            'posted_at' => $t,
+        ]);
         return redirect('admin/post/' . $post->id . '/tags');
+    }
+
+    public function showPostInfo() {
+        $post = Post::where('id', Route::current()->parameter('id'))->first();
+        if ($post == null) {
+            abort(404);
+        }
+        return view('admin.post.edit')->with('post', $post)->with('edit');
+    }
+
+    public function getPostInfo() {
+        return json_encode(Post::all()->first());
+    }
+
+    public function updatePostInfo(CreatePostRequest $request) {
+        return redirect()->back();
     }
 
     public function deletePost() {
