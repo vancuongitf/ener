@@ -88,6 +88,9 @@
                             @if ($errors->first('route-regex'))
                                 <p class="red-text" style="font-size: 1rem;">Post's route is incorrect format!</p>
                             @endif
+                            @if ($errors->first('route-exist'))
+                                <p class="red-text" style="font-size: 1rem;">Post's route is already exists!</p>
+                            @endif
                         </div>
                         <div class="form-group">
                             <input class="form-control" id="create_post_image" type="file" name="image" accept="image/*" onchange="showImageTo(this, '#img_create_post_image');"/>

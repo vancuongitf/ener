@@ -18,7 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('admin')->group(function() {
-    Route::get('tag/childs/{level}/{id}', "Admin\TagController@getTagChilds");
+    Route::prefix('tag')->group(function() {
+        Route::get('childs/{level}/{id}', "Admin\TagController@getTagChilds");
+        Route::delete('{level}/{id}', "Admin\TagController@deleteTag");
+    });
     Route::prefix('post')->group(function() {
         Route::get('{id}', 'Admin\PostController@getPostInfo');
         Route::delete('{id}','Admin\PostController@deletePost');

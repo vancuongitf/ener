@@ -31,6 +31,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/', 'Admin\TagController@getTagHome')->middleware('admin');
         Route::get('/create', 'Admin\TagController@getCreateTag')->middleware('admin');
         Route::post('/create', 'Admin\TagController@createTag')->middleware('admin');
+        Route::get('{level}/{id}', 'Admin\TagController@showTagInfo')->middleware('admin');
+        Route::post('{level}/{id}', 'Admin\TagController@updateTagInfo')->middleware('admin');
     });
 });
 

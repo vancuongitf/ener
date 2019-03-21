@@ -34,9 +34,9 @@ class PostController extends Controller {
             'route' =>  $route,
         ]);
         if ($post->id > 0) {
-            return redirect()->back()->withErrors(['message' => 'Create post fail. Please try later!']);            
+            return redirect('admin/post/' . $post->id . '/tags');            
         } else {
-            return redirect('admin/post/' . $post->id . '/tags');
+            return redirect()->back()->withErrors(['message' => 'Create post fail. Please try later!']);            
         }
     }
 

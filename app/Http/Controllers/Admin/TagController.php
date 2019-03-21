@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\Tag\Tag;
 use App\Model\Tag\TagLevel1;
 use App\Model\Tag\TagLevel2;
 use App\Model\Tag\TagLevel3;
 use App\Http\Requests\Admin\Tag\CreateTagRequest;
+use App\Http\Requests\Admin\Tag\UpdateTagRequest;
 use Route;
 
 class TagController extends Controller {
@@ -44,6 +46,56 @@ class TagController extends Controller {
                 break;
         }
         return redirect()->back();
+    }
+
+    public function showTagInfo() {
+        $level = Route::current()->parameter('level');
+        $id = Route::current()->parameter('id');
+        $tagWrapper = new Tag([
+            'id' => $id,
+            'level' => $level
+        ]);
+        $tag = $tagWrapper->getInfo();
+        if ($tag == null) {
+            abort(404);
+        } 
+        return view('admin.tag.info')->with('tag', $tag);
+    }
+
+    public function updateTagInfo(UpdateTagRequest $request) {
+        $updateCount = 0;
+        switch($request->input('level')) {
+            case 1:
+                $updateCount = TagLevel1::where('id', $request->input('id'))
+                    ->update([
+                        'name' => $request->input('name'),
+                        'route' => $request->input('route')
+                    ]);
+                break;
+            case 2:
+                $updateCount = TagLevel2::where('id', $request->input('id'))
+                    ->update([
+                        'name' => $request->input('name'),
+                        'route' => $request->input('route')
+                    ]);
+                break;
+            case 3:
+                $updateCount = TagLevel3::where('id', $request->input('id'))
+                ->update([
+                    'name' => $request->input('name'),
+                    'route' => $request->input('route')
+                ]);
+                break;
+        }
+        if ($updateCount > 0) {
+            return redirect()->back()->withErrors(['message' => 'Update tag info success!']);
+        } else {
+            return redirect()->back()->withErrors(['message' => 'Update tag info fail!']);
+        }
+    }
+
+    public function deleteTag() {
+
     }
 
     public function getTagChilds() {

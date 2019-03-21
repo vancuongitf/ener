@@ -92,3 +92,15 @@ textarea:focus, input:focus{
     padding: 0px;
     box-sizing: border-box;
 }
+
+.card-header {
+    font-size: 2rem;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.margin-top-20 {
+    margin-top: 10px;
+}
