@@ -18,7 +18,7 @@ class AdminController extends Controller
     protected $redirectTo = '/admin';
 
     public function __constructor() {
-        $this->middlleware('admins', ['except' => 'logout']);
+        $this->middlleware('auth:admin', ['except' => 'logout']);
     }
 
     public function showLoginForm() {

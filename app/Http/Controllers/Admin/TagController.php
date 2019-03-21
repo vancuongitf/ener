@@ -112,7 +112,7 @@ class TagController extends Controller {
                 break;
         }
         if ($tag!=null) {
-            return json_encode($tag->childs());
+            return json_encode($tag->getChilds());
         }
         return json_encode(array());
     }

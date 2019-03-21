@@ -21,7 +21,7 @@
 @section('content')
 <div class="content-full-size">
     <div class="card card-default" style="margin: 20px;">
-        <div class="card-header" style="font-size: 2rem">
+        <div class="card-header" style="font-size: 2rem"> 
             <div class="d-flex justify-content-between" style="width:100%">
                 <div>Post List</div> 
                 <button class="btn btn-primary" style="text-align:center;" onclick="openCreatePost()">Create New Post</button>
