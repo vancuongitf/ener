@@ -1,0 +1,1 @@
+{{Post::all()->first()->name}}

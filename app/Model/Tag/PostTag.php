@@ -8,7 +8,7 @@ use App\Model\Tag\TagLevel2;
 use App\Model\Tag\TagLevel3;
 
 class PostTag extends Model {
-    protected $table = 'post_tag';
+    protected $table = 'post_tags';
 
     protected $fillable = [
         'post_id', 'tag_level_1_id', 'tag_level_2_id', 'tag_level_3_id' 

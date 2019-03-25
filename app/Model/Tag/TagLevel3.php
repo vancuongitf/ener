@@ -19,6 +19,6 @@ class TagLevel3 extends Model {
     }
 
     function getChilds() {
-        return null;
+        return array();
     }
 }
