@@ -26,6 +26,20 @@ class PostController extends Controller {
         }
         $html = $request->get('summernote');
         $route = $request->get('route');
+        while(strpos($html, '<o:p>') !== false) {
+            $html = str_replace('<o:p>', '', $html);
+        }
+        while(strpos($html, '</o:p>') !== false) {
+            $html = str_replace('</o:p>', '', $html);
+        }
+        while(strpos($html, '\r') !== false) {
+            $html = str_replace('\r', '', $html);
+        }
+        while(strpos($html, '\n') !== false) {
+            $html = str_replace('\n', '', $html);
+        }
+        
+
         $post = Post::create([
             'name' => $title,
             'description' => $description,

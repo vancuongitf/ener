@@ -12,8 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app.home');
 });
+Route::get("post/{route}", "Common\PostController@getPostDetail");
+
 Route::prefix('admin')->group(function () {
     Route::get('/login', 'Admin\AdminController@showLoginForm')->middleware('admin-home');
     Route::post('/login', 'Admin\AdminController@login');
@@ -38,4 +40,6 @@ Route::prefix('admin')->group(function () {
 
 Route::post('upload', 'Common\UploadController@uploadImage');
 
-Route::get("post/{route}", "Common\PostController@getPostDetail");
+Route::get('/{level1}/{level2?}/{level3?}', function() {
+    return view('welcome');
+});

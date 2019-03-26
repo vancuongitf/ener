@@ -29,3 +29,11 @@
 .red-text {
     color: red;
 }
+
+.header-text {
+    color: black !important;
+}
+
+.header-text:hover {
+    color: blue !important;
+}
