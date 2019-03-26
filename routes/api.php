@@ -28,5 +28,6 @@ Route::prefix('admin')->group(function() {
         Route::get('{id}', 'Admin\PostController@getPostInfo');
         Route::delete('{id}','Admin\PostController@deletePost');
         Route::delete('tag/{id}', "Admin\PostController@removePostTag");
+        Route::put('publish/{id}', "Admin\PostController@publishPost");
     });
 });

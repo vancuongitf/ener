@@ -26,26 +26,14 @@ class PostController extends Controller {
         }
         $html = $request->get('summernote');
         $route = $request->get('route');
-        while(strpos($html, '<o:p>') !== false) {
-            $html = str_replace('<o:p>', '', $html);
-        }
-        while(strpos($html, '</o:p>') !== false) {
-            $html = str_replace('</o:p>', '', $html);
-        }
-        while(strpos($html, '\r') !== false) {
-            $html = str_replace('\r', '', $html);
-        }
-        while(strpos($html, '\n') !== false) {
-            $html = str_replace('\n', '', $html);
-        }
-        
-
+        $publishNow = $request->get('publish_now');
         $post = Post::create([
             'name' => $title,
             'description' => $description,
             'image' => $image,
             'content' => $html,
             'route' =>  $route,
+            'is_published' => $publishNow
         ]);
         if ($post->id > 0) {
             return redirect('admin/post/' . $post->id . '/tags');            
@@ -137,6 +125,23 @@ class PostController extends Controller {
             PostTag::where('post_id', $postId)->where('tag_level_1_id', $tagLevel1Id)->where('tag_level_2_id', NULL)->delete();
         }
         return redirect()->back();
+    }
+
+    public function publishPost() {
+        $id = Route::current()->parameter('id');   
+        $post = Post::where('id', $id)
+            ->update([
+                'is_published' => '1'
+            ]);
+        if ($post > 0) {
+            return json_encode( new StatusResponse([
+                'status' => 'success'
+            ]));
+        } else {
+            return json_encode( new StatusResponse([
+                'status' => 'fail'
+            ]));
+        }     
     }
 
     public function removePostTag() {

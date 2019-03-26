@@ -18,6 +18,37 @@
             imgChoose.replaceWith(imgChoose.val('').clone(true));
             $('#btn_remove_image').hide();
         }
+
+        function submitClick() {
+            $.alert({
+                title: 'Publish confirm!',
+                content: 'Do you want publish this post now?',
+                buttons: {
+                    heyThere: {
+                        text: 'OK', // text for button
+                        btnClass: 'btn-blue', // class for the button
+                        keys: ['enter'], // keyboard event for button
+                        isHidden: false, // initially not hidden
+                        isDisabled: false, // initially not disabled
+                        action: function(heyThereButton){
+                            $('#publish_now').val('1');
+                            $('#create_post_form').submit();
+                        }
+                    },
+                    somethingElse: {
+                        text: 'Later',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            $('#publish_now').val('0');
+                            $('#create_post_form').submit();
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
+        }
         $(document).ready(function() {
             $('#btn_remove_image').hide();
             $("#viewHTML").click( function() {
@@ -69,7 +100,7 @@
             <div class="card card-default" style="margin: 20px;">
                 <div class="card-header">Create New Post</div>
                 <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form id="create_post_form" action="" method="POST" enctype="multipart/form-data">
                         @csrf 
                         @if($errors->first('message'))
                             <p class="red-text" style="font-size: 1rem;">{{$errors->first('message')}}</p>
@@ -80,6 +111,7 @@
                                 <p class="red-text" style="font-size: 1rem;">Post's title is required!</p>
                             @endif
                         </div>
+                        <input id="publish_now" type="hidden" name="publish_now" value="0">
                         <div class="form-group">
                             <input id="route" name="route" type="text" placeholder="Input post's route" class="form-control" value="{{old('route')}}">                                    
                             @if ($errors->first('route'))
@@ -111,9 +143,8 @@
                         <div class="form-group">
                             <button id="viewHTML" class="btn btn-primary">View content HTML</button>
                         </div>
-
                         <div class="form-group">
-                            <input class="btn btn-primary form-control" type="submit" value="Create">
+                            <input class="btn btn-primary form-control" type="button" onclick="submitClick()" value="Create">
                         </div>
                     </form>
 
