@@ -56,7 +56,7 @@ class AdminController extends Controller
             return redirect('admin/search?page=1&query=' . $query);
         }
         $ignore = ($page - 1) * $this->pageItemCount;
-        $posts = Post::where('name', 'like', '%' . $query . '%')->orWhere('description', 'like', '%' . $query . '%')->get();
+        $posts = Post::where('name_search', 'like', '%' . $query . '%')->orWhere('description_search', 'like', '%' . $query . '%')->get();
         return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', true)->with('haveNextPage', $haveNextPage)->with('page', $page);
     }
 
