@@ -9,7 +9,7 @@ class Post extends Model {
     protected $table = 'posts';
 
     protected $fillable = [
-        'name', 'name_search', 'image', 'content', 'description', 'description_search', 'route', 'posted_at', 'is_published'
+        'name', 'name_search', 'image', 'content', 'description', 'description_search', 'route', 'posted_at', 'is_published', 'is_high_light', 'is_hot'
     ];
 
     public function isHot() {

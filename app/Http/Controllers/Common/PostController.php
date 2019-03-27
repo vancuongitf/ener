@@ -21,10 +21,9 @@ class PostController extends Controller {
                 'route' => $row->route,
                 'image' => $row->image,
                 'description' => $row->description,
-                'posted_at' => $row->posted_at,
                 'created_at' => $row->created_at,
                 'content' => $row->content,
-                'is_hight_light' => $row->is_hight_light,
+                'is_high_light' => $row->is_hight_light,
                 'is_hot' => $row->is_hot,
                 'view_count' => $row->view_count
             ]);

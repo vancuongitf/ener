@@ -1,7 +1,7 @@
 <?php
     use App\Model\Tag\TagLevel1;
     use App\Model\Tag\TagLevel2;
-    use App\Model\Tag\Taglevel3;
+    use App\Model\Tag\TagLevel3;
     $tags = TagLevel1::all();
     foreach ($tags as $tag) {
         $tag2s = TagLevel2::where('tag_level_1_id', $tag->id)->get();
