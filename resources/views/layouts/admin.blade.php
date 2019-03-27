@@ -13,7 +13,6 @@
     <!-- Scripts -->
     {{--
     <script src="{{ asset('js/app.js') }}" defer></script> --}}
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
@@ -35,19 +34,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     @yield('style')
+    @yield('include_script')
 </head>
 
 <body style="min-width: 1000px;">
     @yield('script')
     @include('admin.widget.header')
-    <div class="row row-eq-height content-full-size" style="padding: 0px; margin: 0px;">
-        <div class="col-3 content-full-size" style="padding: 0px; margin: 0px;">
-    @include('admin.widget.side-bar')
-        </div>
-        <div class="col-9 content-full-size" style="padding: 0px; margin: 0px;">
-            @yield('content')
-        </div>
-    </div>
+    @yield('content')
 </body>
 
 </html>

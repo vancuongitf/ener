@@ -17,10 +17,11 @@ Route::get('/', function () {
 Route::get("post/{route}", "Common\PostController@getPostDetail");
 
 Route::prefix('admin')->group(function () {
+    Route::get('/notpublish/{page?}', 'Admin\AdminController@showNotPublishPost');
     Route::get('/login', 'Admin\AdminController@showLoginForm')->middleware('admin-home');
     Route::post('/login', 'Admin\AdminController@login');
-    Route::get('/', 'Admin\AdminController@getHome')->middleware('admin');
     Route::get('/logout', 'Admin\AdminController@logout');
+    Route::get('/search', 'Admin\AdminController@search');
     Route::prefix('post')->group(function () {
         Route::get('info/{id}', 'Admin\PostController@showPostInfo');
         Route::post('info/{id}', 'Admin\PostController@updatePostInfo');
@@ -36,6 +37,7 @@ Route::prefix('admin')->group(function () {
         Route::get('{level}/{id}', 'Admin\TagController@showTagInfo')->middleware('admin');
         Route::post('{level}/{id}', 'Admin\TagController@updateTagInfo')->middleware('admin');
     });
+    Route::get('/{page?}', 'Admin\AdminController@getHome')->middleware('admin');
 });
 
 Route::post('upload', 'Common\UploadController@uploadImage');

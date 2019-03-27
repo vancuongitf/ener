@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Auth;
+use Route;
 use App\Model\Post;
 
 class AdminController extends Controller
@@ -16,6 +17,7 @@ class AdminController extends Controller
      * @var string
      */
     protected $redirectTo = '/admin';
+    public $pageItemCount = 30;
 
     public function __constructor() {
         $this->middlleware('auth:admin', ['except' => 'logout']);
@@ -26,8 +28,54 @@ class AdminController extends Controller
     }
 
     public function getHome() {
-        $posts = Post::all();
-        return view('admin.home')->with('posts', $posts);
+        $page = Route::current()->parameter('page');
+        $haveNextPage = false;
+        if ($page == null) {
+            $page = 1;
+        }
+        if (!is_numeric($page) || $page < 1) {
+            return redirect('admin');
+        }
+        $ignore = ($page - 1) * $this->pageItemCount;
+        $posts = Post::where('id', '!=', '0')->skip($ignore)->take($this->pageItemCount + 1)->get();
+        if (count($posts) > $this->pageItemCount) {
+            $posts = Post::where('id', '!=', '0')->skip($ignore)->take($this->pageItemCount)->get();
+            $haveNextPage = true;
+        }
+        return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', true)->with('haveNextPage', $haveNextPage)->with('page', $page);
+    }
+
+    public function search(Request $request) {
+        $page = $request->get('page');
+        $query = $request->get('query');
+        $haveNextPage = false;
+        if ($page == null) {
+            $page = 1;
+        }
+        if (!is_numeric($page) || $page < 1) {
+            return redirect('admin/search?page=1&query=' . $query);
+        }
+        $ignore = ($page - 1) * $this->pageItemCount;
+        $posts = Post::where('name', 'like', '%' . $query . '%')->orWhere('description', 'like', '%' . $query . '%')->get();
+        return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', true)->with('haveNextPage', $haveNextPage)->with('page', $page);
+    }
+
+    public function showNotPublishPost() {
+        $page = Route::current()->parameter('page');
+        $haveNextPage = false;
+        if ($page == null) {
+            $page = 1;
+        }
+        if (!is_numeric($page) || $page < 1) {
+            return redirect('admin');
+        }
+        $ignore = ($page - 1) * $this->pageItemCount;
+        $posts = Post::where('is_published', '==', '0')->skip($ignore)->take($this->pageItemCount + 1)->get();
+        if (count($posts) > $this->pageItemCount) {
+            $haveNextPage = true;
+            $posts = Post::where('id', '!=', '0')->skip($ignore)->take($this->pageItemCount)->get();
+        }
+        return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', false)->with('haveNextPage', $haveNextPage)->with('page', $page);
     }
 
     public function login(Request $request) {

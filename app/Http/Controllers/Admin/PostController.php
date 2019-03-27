@@ -29,7 +29,9 @@ class PostController extends Controller {
         $publishNow = $request->get('publish_now');
         $post = Post::create([
             'name' => $title,
+            'name_search' => $request->get('name_search'),
             'description' => $description,
+            'description_search' => $request->get('description_search'),
             'image' => $image,
             'content' => $html,
             'route' =>  $route,
@@ -67,10 +69,13 @@ class PostController extends Controller {
         $post = Post::where('id', $request->input('id'))
             ->update([
                 'name' => $request->input('title'),
+                'name_search' => $request->get('name_search'),
                 'route' => $request->input('route'),
                 'description' => $request->input('description'),
+                'description_search' => $request->get('description_search'),
                 'content' => $request->input('summernote'),
-                'image' => $newImage
+                'image' => $newImage,
+                'is_published' => $request->get('publish_now')
             ]);
         if ($post > 0) {
             return redirect()->back()->withErrors(['message' => 'Update post info success!']);

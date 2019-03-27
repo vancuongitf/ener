@@ -26,9 +26,19 @@ class CreatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'route' => 'required',
+            'title' => 'required|max:300',
+            'route' => 'required|max:300',
             'summernote' => 'required'
+        ];
+    }
+
+    public function messages() {
+        return [
+            'title.required' => 'Post\'s name is required!',
+            'title.max' => 'Post\'s name length must short than 300 chars!',
+            'route.required'  => 'Post\'s route is required!',
+            'route.max' => 'Post\'s route length must short than 300 chars!',
+            'summernote.required' => 'Post\'s content is required!'
         ];
     }
 
