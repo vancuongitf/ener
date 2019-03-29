@@ -37,11 +37,8 @@
             <div class="col-lg-2 ads-container">
                 @yield('left-zone')
             </div>
-            <div class="col-md-12 col-lg-6">
+            <div class="col-md-12 col-lg-10">
                 @yield('content')
-            </div>
-            <div class="col-md-12 col-lg-4">
-                @yield('right-zone')
             </div>
         </div>
         @include('app.widget.footer')

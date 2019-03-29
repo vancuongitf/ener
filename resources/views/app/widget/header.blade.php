@@ -13,7 +13,7 @@
     }
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary sticky-top">
-    <a class="navbar-brand" style="margin-right: 50px;" href="">Trang Chủ</a>
+    <a class="navbar-brand" style="margin-right: 50px;" href="/">Trang Chủ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -21,7 +21,7 @@
         <ul class="navbar-nav">
             @foreach ($tags as $tag) @if (count($tag->childs) > 0)
             <li class="nav-item dropdown" style="position: static;">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 50px;">{{$tag->name}}</a>
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 50px;">{{$tag->name}}</a>
                 <div class="dropdown-menu bg-primary" style="width:100%; border: none; border-radius: 0px; padding: 0px; margin: 0px;">
                     <div class="row" style="padding: 0px 15px;">
                         <div class="col-12">
