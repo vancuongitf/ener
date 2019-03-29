@@ -228,9 +228,9 @@ $(document).ready(function () {
         return str.concat(".html");
     }
     $('.note-icon-video').parent().hide();
-    $('.note-icon-picture').parent().hide();
-    $btnImage = '<button type="button" onclick="insertImageOnClicked()" class="note-btn btn btn-light btn-sm" role="button" tabindex="-1" title="" aria-label="Picture" data-original-title="Picture"><i class="note-icon-picture"></i></button>';
+    // $('.note-icon-picture').parent().hide();
+    // $btnImage = '<button type="button" onclick="insertImageOnClicked()" class="note-btn btn btn-light btn-sm" role="button" tabindex="-1" title="" aria-label="Picture" data-original-title="Picture"><i class="note-icon-picture"></i></button>';
     $btnVideo = '<button type="button" onclick="insertVideoOnClicked()" class="note-btn btn btn-light btn-sm" role="button" tabindex="-1" title="" aria-label="Video" data-original-title="Video"><i class="note-icon-video"></i></button>';
-    $('.note-icon-video').parent().parent().append($btnImage);
+    // $('.note-icon-video').parent().parent().append($btnImage);
     $('.note-icon-video').parent().parent().append($btnVideo);
 });

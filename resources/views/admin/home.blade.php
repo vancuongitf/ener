@@ -127,12 +127,12 @@
                 <tr id="{{'post-' . $post->id}}">
                     <td style="text-align:center; max-width: 80px;">{{$stt++}}</td>
                     <td style="height:100px;">{{$post->id}}</td>
-                    <td><a href="{{"admin/post/info/" . $post->id}}">{{$post->name}}</a></td>
+                    <td><a href="{{url("admin/post/info/" . $post->id)}}">{{$post->name}}</a></td>
                     <td><a href="{{url('admin/post/' . $post->id . '/tags')}}">View</a></td>
                     <td>{{$post->created_at}}</td>
                     <td>{{$post->view_count}}</td>
                     <td><input type="checkbox" style="width:30px; height:30px;" {{$post->isHot()}}></td>
-                    <td><input type="checkbox" style="width:30px; height:30px;" {{$post->isHightLight()}}></td>
+                    <td><input type="checkbox" style="width:30px; height:30px;" {{$post->isHighLight()}}></td>
                     <td>
                         @if ($post->is_published == 0)
                             <button id="btnPublish-{{$post->id}}" class="btn btn-primary" onclick="publishNow({{$post->id}})">Publish now</button>                            

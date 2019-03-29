@@ -9,7 +9,7 @@ class Post extends Model {
     protected $table = 'posts';
 
     protected $fillable = [
-        'name', 'name_search', 'image', 'content', 'description', 'description_search', 'route', 'posted_at', 'is_published', 'is_high_light', 'is_hot'
+        'id', 'name', 'name_search', 'image', 'content', 'description', 'description_search', 'route', 'posted_at', 'is_published', 'is_high_light', 'is_hot'
     ];
 
     public function isHot() {
@@ -20,20 +20,12 @@ class Post extends Model {
         }
     }
 
-    public function isHightLight() {
+    public function isHighLight() {
         if ($this->is_hight_light == 1) {
             return 'checked';
         } else {
             return '';
         }
-    }
-
-    public function sluggable() {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
     }
 
     public function getPostedTime() {
