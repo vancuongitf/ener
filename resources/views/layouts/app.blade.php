@@ -34,7 +34,7 @@
 <body style="box-sizing:border-box;">
     <div>
         @include('app.widget.header') 
-        <div class="row" style="padding: 0px; margin: 0px;">
+        <div class="row" style="margin-top: -52.625px; padding-top: 52.625; padding-bottom: 300px; min-height: 100%;">
             <div class="col-lg-2 ads-container">
                 @yield('left-zone')
             </div>
@@ -42,7 +42,9 @@
                 @yield('content')
             </div>
         </div>
-        @include('app.widget.footer')
+        <div style="margin-top: -300px;">
+            @include('app.widget.footer')
+        </div>
     </div>  
 </body>
 
