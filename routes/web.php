@@ -25,6 +25,7 @@ Route::prefix('admin')->group(function () {
         Route::post('info/{id}', 'Admin\PostController@updatePostInfo')->middleware('admin');
         Route::get('create', 'Admin\PostController@showCreatePostForm')->middleware('admin');
         Route::post('create', 'Admin\PostController@createPost')->middleware('admin');
+        Route::get('review/{id}', 'Admin\PostController@reviewPost')->middleware('admin');
         Route::get('{id}/tags', 'Admin\PostController@showPostTags')->middleware('admin');
         Route::post('{id}/tags', 'Admin\PostController@addPostTag')->middleware('admin');
     });

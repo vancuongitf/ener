@@ -4,6 +4,60 @@
 @endsection
 @section('script')
     <script>
+        function reviewPost() {
+            window.open('{{ url("admin/post/review/" . $post->id) }}');
+        }
+        function postTags() {
+            window.location.href = '{{ url("admin/post/" . $post->id . "/tags") }}'
+        }
+        function publishNow($id) {
+            $.alert({
+                title: 'Publish confirm!',
+                content: 'Do you want publish this post now?',
+                buttons: {
+                    heyThere: {
+                        text: 'OK', // text for button
+                        btnClass: 'btn-blue', // class for the button
+                        keys: ['enter'], // keyboard event for button
+                        isHidden: false, // initially not hidden
+                        isDisabled: false, // initially not disabled
+                        action: function(heyThereButton){
+                            $.ajax({
+                                type: 'PUT',
+                                url:  "{{url('/api/admin/post/publish/')}}".concat("/", $id),
+                                crossDomain: true,
+                                xhrFields: { 
+                                    withCredentials: true
+                                },
+                                success: function( msg ) {
+                                    var objJSON = JSON.parse(msg);
+                                    if (objJSON.status == 'success') {
+                                        $.alert({
+                                            title: 'Notification!',
+                                            content: 'This post was published!',
+                                        });
+                                        $('#publish_post').hide();
+                                    } else {
+                                        $.alert({
+                                            title: 'Error!',
+                                            content: 'Publish fail, please try again!',
+                                        });
+                                    }                   
+                                },
+                                error:function (xhr, ajaxOptions, thrownError) {
+                                    $.alert({
+                                        title: 'Error!',
+                                        content: 'Publish fail, please try again!',
+                                    });
+                                }
+                            });
+                        }
+                    },
+                    cancel: function () {
+                    }
+                }
+            });
+        }
         $(document).ready( function() {
             if ($('#getPostInfo').val() == "GET") {
                 $('#title').val("{{$post->name}}");
@@ -24,7 +78,18 @@
 <div class="row" style="font-size: 1.5rem; padding: 0px; margin: 0px;">
         <div class="col-12">
             <div class="card card-default" style="margin: 20px;">
-                <div class="card-header">Edit Post Info</div>
+                <div class="card-header">
+                    <div class="d-flex justify-content-between" style="width:100%">
+                        <div>Edit Post Info</div> 
+                        <div>
+                            <button class="btn btn-primary" style="text-align:center;" onclick="reviewPost()">Review Post</button>                        
+                            <button class="btn btn-primary" style="text-align:center;" onclick="postTags()">Post's Tags</button>
+                            @if ($post->is_published == '0')
+                                <button id="publish_post" class="btn btn-primary" style="text-align:center;" onclick="publishNow({{$post->id}})">Publish Now</button>                                
+                            @endif
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <form id="post_form" action="" method="POST" enctype="multipart/form-data">
                         @csrf 

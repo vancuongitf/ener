@@ -52,6 +52,16 @@ class PostController extends Controller {
         return view('admin.post.edit')->with('post', $post);
     }
 
+    public function reviewPost(Request $request) {
+        $post = Post::where('id', Route::current()->parameter('id'))->first();
+        if ($post == null) {
+            abort(404);
+        }
+        return view('app.post.post')->with([
+            'post' => $post,
+        ]);
+    }
+
     public function getPostInfo() {
         return json_encode(Post::all()->first());
     }
