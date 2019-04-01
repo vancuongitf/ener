@@ -6,15 +6,30 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Post;
 use App\Model\Tag\PostTag;
+use App\Model\Tag\TagLevel1;
+use App\Model\Tag\TagLevel2;
+use App\Model\Tag\TagLevel3;
 use App\Model\Util\IntSet;
 use Route;
 use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller {
     
+    public function getHome() {
+        $categories = array();
+        $tag1s = TagLevel1::all();
+        foreach ($tag1s as $tag1) {
+            $tag1->posts = PostController::getCategoryPosts($tag1->id, 1);
+            if (count($tag1->posts) > 0) {
+                array_push($categories, $tag1);
+            }
+        }
+        return view('app.home.home')->with('categories', $categories);
+    }
+
     public function getPostDetail(Request $request) {
         $route = Route::current()->parameter('route');
-        $post = Post::where('route', $route)->first();
+        $post = Post::where('route', $route)->where('is_published', '1')->first();
         if ($post != null) {
             return view('app.post.post')->with([
                 'post' => $post,
@@ -48,16 +63,14 @@ class PostController extends Controller {
         foreach ($postIdQueryResult as $postIdQR) {
             array_push($postIds, $postIdQR->post_id);
         }
-        $posts = Post::select('id', 'route', 'name', 'image')
+        $posts = Post::select('id', 'route', 'name', 'image', 'created_at')
         ->whereIn('id', $postIds)
+        ->where('is_published', '1')
         ->orderBy('created_at', 'desc')
         ->take(10)
         ->get();
         if (count($posts) < 10) {
             $posts = $posts->merge(PostController::getRelativePostLevel2($postId, $postIds));
-            if (count($posts) < 10) {
-
-            }
             return $posts;
         } else {
             return $posts;
@@ -84,8 +97,9 @@ class PostController extends Controller {
         foreach ($postIdQueryResult as $postIdQR) {
             array_push($postIds, $postIdQR->post_id);
         }
-        $post2s = Post::select('id', 'route', 'name', 'image')
+        $post2s = Post::select('id', 'route', 'name', 'image', 'created_at')
         ->whereIn('id', $postIds)
+        ->where('is_published', '1')
         ->orderBy('created_at', 'desc')
         ->take(10 - count($existIds))
         ->get();
@@ -119,11 +133,35 @@ class PostController extends Controller {
         foreach ($postIdQueryResult as $postIdQR) {
             array_push($postIds, $postIdQR->post_id);
         }
-        $post2s = Post::select('id', 'route', 'name', 'image')
+        $post2s = Post::select('id', 'route', 'name', 'image', 'created_at')
         ->whereIn('id', $postIds)
+        ->where('is_published', '1')
         ->orderBy('created_at', 'desc')
         ->take(10 - count($existIds))
         ->get();
         return $post2s;
+    }
+
+    private function getCategoryPosts($id, $level) {
+        $columnName = '';
+        switch($level) {
+            case '1':
+                $columnName = 'tag_level_1_id';
+                break;
+            case '2':
+                $columnName = 'tag_level_2_id';
+                break;
+            case '3':
+                $columnName = 'tag_level_3_id';
+                break;
+        }
+        return DB::table('posts')
+            ->join('post_tags', 'posts.id', '=', 'post_tags.post_id')
+            ->select('posts.*')
+            ->where($columnName, $id)
+            ->where('posts.is_published', '1')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
     }
 }

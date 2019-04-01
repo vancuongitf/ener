@@ -29,9 +29,16 @@
                 <h3 style="border-bottom: 2px solid red;">Bài viết cùng chủ đề:</h3>
                 @foreach ($relativePosts as $relativePost)
                     <div style="width: 100%; margin-bottom:20px;">
-                        <img style="width: 160px; height: 90px; float: left; margin-right:10px;" src="{{ url('file_storage/' . $relativePost->image) }}" alt="" srcset="">
-                        <a class="main-text-hover" href=""><h5>&clubs; {{$relativePost->name}}</h5></a>              
-                        <div style="clear:left;"></div>                    
+                        @if ($relativePost->image)
+                            <div style="width: 160px; float: left;">
+                                <div class="image-wrapper">
+                                    <img src="{{ url('file_storage/' . $relativePost->image) }}" alt="{{$relativePost->name}}">
+                                </div>
+                            </div>
+                        @endif
+                        <a class="main-text-hover remove-text-decoration ellipse" href="{{ url('post/' . $relativePost->route) }}"><b>{{ $relativePost->name }}</b></a>              
+                        <p class="secondary-text" style="margin: 0px">{{ $relativePost->created_at }}</p>
+                        <div class="clear"></div>                    
                     </div>
                 @endforeach
             @endif

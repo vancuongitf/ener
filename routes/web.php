@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('app.home');
-});
+Route::get('/', 'Common\PostController@getHome');
 Route::get("post/{route}", "Common\PostController@getPostDetail");
 
 Route::prefix('admin')->group(function () {
