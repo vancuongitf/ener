@@ -37,9 +37,9 @@ class AdminController extends Controller
             return redirect('admin');
         }
         $ignore = ($page - 1) * $this->pageItemCount;
-        $posts = Post::where('id', '!=', '0')->skip($ignore)->take($this->pageItemCount + 1)->get();
+        $posts = Post::where('id', '!=', '0')->orderBy('created_at', 'desc')->skip($ignore)->take($this->pageItemCount + 1)->get();
         if (count($posts) > $this->pageItemCount) {
-            $posts = Post::where('id', '!=', '0')->skip($ignore)->take($this->pageItemCount)->get();
+            $posts = Post::where('id', '!=', '0')->orderBy('created_at', 'desc')->skip($ignore)->take($this->pageItemCount)->get();
             $haveNextPage = true;
         }
         return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', true)->with('haveNextPage', $haveNextPage)->with('page', $page);
@@ -70,10 +70,10 @@ class AdminController extends Controller
             return redirect('admin');
         }
         $ignore = ($page - 1) * $this->pageItemCount;
-        $posts = Post::where('is_published', '==', '0')->skip($ignore)->take($this->pageItemCount + 1)->get();
+        $posts = Post::where('is_published', '==', '0')->orderBy('created_at', 'desc')->skip($ignore)->take($this->pageItemCount + 1)->get();
         if (count($posts) > $this->pageItemCount) {
             $haveNextPage = true;
-            $posts = Post::where('id', '!=', '0')->skip($ignore)->take($this->pageItemCount)->get();
+            $posts = Post::where('id', '!=', '0')->orderBy('created_at', 'desc')->skip($ignore)->take($this->pageItemCount)->get();
         }
         return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', false)->with('haveNextPage', $haveNextPage)->with('page', $page);
     }
