@@ -7,6 +7,9 @@
         });
     </script>
 @endsection
+@section('page-title')
+    Ener.vn
+@endsection
 @section('content')
     <div class="row">
         <div class="col-lg-9">

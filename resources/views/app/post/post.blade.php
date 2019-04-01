@@ -15,6 +15,9 @@
         margin-right: auto !important;
     }
 </style>
+@section('page-title')
+    {{ $post->name }}
+@endsection
 @section('content')
 <div class="post-content">
     <div class="row">
