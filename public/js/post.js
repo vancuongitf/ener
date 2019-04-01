@@ -67,13 +67,24 @@ function submitClick() {
                     $('#description_search').val(descriptionSearch);
                     $('#publish_now').val('1');
                     var markupStr = $('#summernote').summernote('code');
-                    var iframes = markupStr.match(/<iframe(.*)iframe>/g);
-                    iframes.forEach(iframe => {
-                        var videoUrl = iframe.split('src="')[1].split('"')[0];
-                        var tag = '<div class="videoWrapper"><iframe frameborder="0" src="'.concat(videoUrl, '"></iframe></div><br>');
-                        markupStr = markupStr.replace(iframe, tag);
-                    });
+                    while(markupStr.indexOf('\n') > -1 || markupStr.indexOf('\r') > -1) {
+                        markupStr = markupStr.replace('\n','');    
+                        markupStr = markupStr.replace('\r', '');
+                    }
+                    var apostrophes = markupStr.split("'");
+                    for(var i = 0; i < apostrophes.length - 1; i++) {
+                        markupStr = markupStr.replace(apostrophes[i], apostrophes[i].concat('\\\\'));
+                    }
                     $('#summernote').summernote('code', markupStr);
+                    var iframes = markupStr.match(/<iframe(.*)iframe>/g);
+                    if (iframes != null) {
+                        iframes.forEach(iframe => {
+                            var videoUrl = iframe.split('src="')[1].split('"')[0];
+                            var tag = '<div class="videoWrapper"><iframe frameborder="0" src="'.concat(videoUrl, '"></iframe></div><br>');
+                            markupStr = markupStr.replace(iframe, tag);
+                        });
+                        $('#summernote').summernote('code', markupStr);
+                    }
                     $('#post_form').submit();
                 }
             },
@@ -87,6 +98,25 @@ function submitClick() {
                     $('#name_search').val(nameSearch);
                     $('#description_search').val(descriptionSearch);
                     $('#publish_now').val('0');
+                    var markupStr = $('#summernote').summernote('code');
+                    while(markupStr.indexOf('\n') > -1 || markupStr.indexOf('\r') > -1) {
+                        markupStr = markupStr.replace('\n','');    
+                        markupStr = markupStr.replace('\r', '');
+                    }
+                    var apostrophes = markupStr.split("'");
+                    for(var i = 0; i < apostrophes.length - 1; i++) {
+                        markupStr = markupStr.replace(apostrophes[i], apostrophes[i].concat('\\\\'));
+                    }
+                    $('#summernote').summernote('code', markupStr);
+                    var iframes = markupStr.match(/<iframe(.*)iframe>/g);
+                    if (iframes != null) {
+                        iframes.forEach(iframe => {
+                            var videoUrl = iframe.split('src="')[1].split('"')[0];
+                            var tag = '<div class="videoWrapper"><iframe frameborder="0" src="'.concat(videoUrl, '"></iframe></div><br>');
+                            markupStr = markupStr.replace(iframe, tag);
+                        });
+                        $('#summernote').summernote('code', markupStr);
+                    }
                     $('#post_form').submit();
                 }
             },

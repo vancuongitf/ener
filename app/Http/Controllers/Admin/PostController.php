@@ -169,7 +169,7 @@ class PostController extends Controller {
         if ($file != null) {
             $destinationPath = 'file_storage/';
             $originalFile = $file->getClientOriginalName();
-            $filename=md5(strtotime(date('Y-m-d-H:isa')).$originalFile).".jpg";
+            $filename=md5(microtime().$originalFile).".jpg";
             $uploaded = $file->move($destinationPath, $filename);
         }
         if ($uploaded) {
