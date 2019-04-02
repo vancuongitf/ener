@@ -2,7 +2,11 @@
     $i = 0;
 ?>
 <div>
-    <a style="text-decoration:none;" href="{{ url('/' . $category->route) }}"><h3 class="main-text-hover" style="border-bottom: 2px solid #9E9E9E">{{$category->name}}</h3></a>
+    <div style="padding-bottom: 5px; border-bottom: 2px solid black;">
+        <a style="text-decoration:none;" href="{{ url('/' . $category->route) }}">
+            <h3 class="main-text-hover background-orange" style="padding: 5px 10px; margin: 0px;">{{$category->name}}</h3>
+        </a>
+    </div>
     <div style="padding: 10px;">
         @foreach ($category->posts as $post)
             @if ($i==0)

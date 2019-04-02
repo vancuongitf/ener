@@ -21,13 +21,13 @@
 @section('content')
 <div class="post-content">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-8" style="padding: 0px 30px;">
             <h1><b>{{$post->name}}</b></h1>
             <p class="secondary-text">{{$post->created_at}}</p>
             <b>{{$post->description}}</b> 
             {!!$post->content!!}
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4" style="padding: 0px 30px;">
                 @if (count($relativePosts)>0)
                 <h3 style="border-bottom: 2px solid red;">Bài viết cùng chủ đề:</h3>
                 @foreach ($relativePosts as $relativePost)

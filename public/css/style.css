@@ -1,4 +1,6 @@
 html, body {
+    font-family: Arial, Helvetica, sans-serif !important;
+    height: 100%;
     background-color: white;
     padding: 0;
     margin: 0;
@@ -11,11 +13,6 @@ html, body {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    height: 100%;
 }
 
 b {
@@ -152,8 +149,16 @@ textarea:focus, input:focus{
     display: block; /* Fallback for non-webkit */
     display: -webkit-box;
     margin: 0 auto;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.text-bg-black {
+    color: white !important;
+}
+
+.text-bg-black:hover {
+    color: #E0E0E0 !important;
 }

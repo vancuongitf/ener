@@ -13,6 +13,52 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-.test {
-  background-color: aqua;
+$colors: (
+    black: #000000,
+    white: #FFFFFF,
+    red: #F44336,
+    purple: #673AB7,
+    orange: #FF9800
+);
+
+.background-black {
+  background-color: map-get($map: $colors, $key: black) !important
 }
+
+.background-white {
+  background-color: map-get($map: $colors, $key: white) !important
+}
+
+.background-red {
+  background-color: map-get($map: $colors, $key: red) !important
+}
+
+.background-purple {
+  background-color: map-get($map: $colors, $key: purple) !important
+}
+
+.background-orange {
+  background-color: map-get($map: $colors, $key: orange) !important
+}
+
+$ellipseMaxLine: 10;
+
+%ellipseParent {
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  margin: 0 auto;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin col-x-list {
+  @for $i from 1 through $ellipseMaxLine {
+      .ellipse-#{$i} { 
+        @extend %ellipseParent;
+        -webkit-line-clamp: #{$i};        
+      }
+  }
+}
+
+@include col-x-list;
