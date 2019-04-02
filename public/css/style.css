@@ -124,12 +124,10 @@ textarea:focus, input:focus{
 .videoWrapper .videoWrapper {
 	margin: 0px !important;
 }
-.remove-text-decoration {
-    text-decoration: none;
-}
+
 /* BODY CONTENT */
 @media (max-width: 991px) {
-    .ads-container {
+    .ads-side-zone {
         display: none;
     }
 }

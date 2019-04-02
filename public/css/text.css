@@ -37,3 +37,7 @@
 .header-text:hover {
     color: blue !important;
 }
+
+.remove-text-decoration {
+    text-decoration: none !important;
+}

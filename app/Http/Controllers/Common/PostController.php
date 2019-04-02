@@ -12,9 +12,15 @@ use App\Model\Tag\TagLevel3;
 use App\Model\Util\IntSet;
 use Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 class PostController extends Controller {
     
+    public static function getRelativePosts($postId) {
+        $posts = PostController::getRelativePostLevel3($postId);
+        return $posts;
+    }
+
     public function getHome() {
         $categories = array();
         $tag1s = TagLevel1::all();
@@ -39,9 +45,86 @@ class PostController extends Controller {
         }
     }
 
-    public static function getRelativePosts($postId) {
-        $posts = PostController::getRelativePostLevel3($postId);
-        return $posts;
+    public function getPostByTag(Request $request) {
+        $level1 = Route::current()->parameter('level1');
+        $level2 = Route::current()->parameter('level2');
+        $level3 = Route::current()->parameter('level3');
+        $tag1 = null;
+        $tag2 = null;
+        $tag3 = null;
+        $categoryPosts = null;
+        $tag1 = TagLevel1::where('route', $level1)->first();
+        if ($tag1 != null) {
+            $tag2 = TagLevel2::where('route', $level2)->where('tag_level_1_id', $tag1->id)->first();
+            if ($tag2 != null) {
+                $tag3 = TagLevel3::where('route', $level3)->where('tag_level_2_id', $tag2->id)->first();
+                if ($tag3 != null) {
+                    $categoryPosts = PostController::getCategoryPostsWithPage($tag3->id, 3, 1);
+                } else {
+                    if ($level3 != null) {
+                        abort(404);
+                    } else {
+                        $categoryPosts = PostController::getCategoryPostsWithPage($tag2->id, 2, 1);
+                    }      
+                }
+            } else {
+                if ($level2 != null) {
+                    abort(404);
+                } else {
+                    $categoryPosts = PostController::getCategoryPostsWithPage($tag1->id, 1, 1);
+                }
+            }
+        } else {
+            abort(404);
+        }
+        return view('app.category.category-posts')->with([
+            'tag1' => $tag1,
+            'tag2' => $tag2,
+            'tag3' => $tag3,
+            'categoryPosts' => $categoryPosts
+        ]);
+    }
+
+    private static function getCategoryPostsWithPage($id, $level, $page) {
+        $columnName = '';
+        switch($level) {
+            case '1':
+                $columnName = 'tag_level_1_id';
+                break;
+            case '2':
+                $columnName = 'tag_level_2_id';
+                break;
+            case '3':
+                $columnName = 'tag_level_3_id';
+                break;
+        }
+        $nextPageFlag = false;
+        $posts = DB::table('posts')
+            ->join('post_tags', 'posts.id', '=', 'post_tags.post_id')
+            ->select('posts.*')
+            ->where($columnName, $id)
+            ->where('posts.is_published', '1')
+            ->orderBy('created_at', 'desc')
+            ->skip(($page - 1) * 30) 
+            ->take(31)
+            ->get();
+        if (count($posts) > 30) {
+            $nextPageFlag = true;
+            $posts = DB::table('posts')
+                ->join('post_tags', 'posts.id', '=', 'post_tags.post_id')
+                ->select('posts.*')
+                ->where($columnName, $id)
+                ->where('posts.is_published', '1')
+                ->orderBy('created_at', 'desc')
+                ->skip(($page - 1) * 30) 
+                ->take(30)
+                ->get();
+        }
+        return new CategoryPostResponse([
+            'posts' => $posts,
+            'next_page_flag' => $nextPageFlag,
+            'page' => $page
+        ]);
     }
 
     private static function getRelativePostLevel3($postId) {
@@ -164,4 +247,10 @@ class PostController extends Controller {
             ->take(5)
             ->get();
     }
+}
+
+class CategoryPostResponse extends Model{
+    protected $fillable = [
+        'posts', 'next_page_flag', 'page'
+    ];
 }

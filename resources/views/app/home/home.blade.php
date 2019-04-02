@@ -1,17 +1,15 @@
 @extends('layouts.app')
 @section('include-script')
-<script>
-        $(document).ready( function() {
-            var string = '<p><iframe frameborder="0" src="//www.youtube.com/embed/3azFLJsOJlac" width="640" height="360" class="note-video-clip"></iframe><br></p>';
-            console.log(string.replace(/<iframe(.*)iframe>/g,'cuong'));
-        });
-    </script>
+
 @endsection
 @section('page-title')
     Ener.vn
 @endsection
+@section('left-zone')
+    
+@endsection
 @section('content')
-    <div class="row">
+    <div class="row" style="padding: 10px;">
         <div class="col-lg-9">
             <div class="row row-eq-height" style="box-sizing:border-box;">
                 @foreach ($categories as $category)
@@ -21,7 +19,7 @@
                 @endforeach
         </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-3 ads-side-zone" style="padding: 10px; margin: 0px;">
 
         </div>
     </div>

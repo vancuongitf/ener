@@ -13,7 +13,6 @@
 
 Route::get('/', 'Common\PostController@getHome');
 Route::get("post/{route}", "Common\PostController@getPostDetail");
-
 Route::prefix('admin')->group(function () {
     Route::get('/notpublish/{page?}', 'Admin\AdminController@showNotPublishPost')->middleware('admin');
     Route::get('/login', 'Admin\AdminController@showLoginForm')->middleware('admin-home');
@@ -38,9 +37,5 @@ Route::prefix('admin')->group(function () {
     });
     Route::get('/{page?}', 'Admin\AdminController@getHome')->middleware('admin');
 });
-
 Route::post('upload', 'Common\UploadController@uploadImage');
-
-Route::get('/{level1}/{level2?}/{level3?}', function() {
-    return view('welcome');
-});
+Route::get('/{level1}/{level2?}/{level3?}', 'Common\PostController@getPostByTag');

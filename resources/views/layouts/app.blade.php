@@ -32,17 +32,17 @@
 </head>
 
 <body style="box-sizing:border-box;">
-    <div>
+    <div style="box-sizing: border-box;">
         @include('app.widget.header') 
-        <div class="row" style="margin-top: -52.625px; padding-top: 52.625; padding-bottom: 300px; min-height: 100%;">
-            <div class="col-lg-2 ads-container">
+        <div class="row" style="padding: 0px; margin: 0px; width: 100%;box-sizing:border-box; padding-bottom: 300px; min-height: 100%;">
+            <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">
                 @yield('left-zone')
             </div>
-            <div class="col-md-12 col-lg-10">
+            <div class="col-md-12 col-lg-10" style="box-sizing:border-box; margin: 0px; padding: 0px;">
                 @yield('content')
             </div>
         </div>
-        <div style="margin-top: -300px;">
+        <div style="margin-top: -300px;" style="box-sizing:border-box;">
             @include('app.widget.footer')
         </div>
     </div>  
