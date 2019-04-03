@@ -16,7 +16,15 @@
     }
 </style>
 @section('page-title')
-
+    @if ($tag2 != null)
+        @if ($tag3 != null)
+            {{ $tag3->name }}
+        @else
+            {{ $tag2->name }}
+        @endif
+    @else
+        {{ $tag1->name }}
+    @endif
 @endsection
 
 @section('left-zone')
