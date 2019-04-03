@@ -44,15 +44,15 @@
         </div>
         <a class="remove-text-decoration main-text-hover" href=" {{ url('post/' . $post->route) }} ">
             <div class="post-title-lg">
-                <h3 class="ellipse-2">{{ $post->name }}</h3>
+                <h3 class="ellipse-3">{{ $post->name }}</h3>
             </div>
             <div class="post-title-sm">
-                <b class="ellipse-2">{{ $post->name }}</b>
+                <b class="ellipse-3">{{ $post->name }}</b>
             </div>
         </a>
         @if ($post->description)
-            <div class="secondary-text post-title-lg">
-                <p class="ellipse-3">{{ $post->description }}</p>
+            <div class="post-title-lg">
+                <i class="ellipse-3">{{ $post->description }}</i>
             </div>
         @endif
         <p class="secondary-text createdTime">{{ $post->created_at }}</p>                

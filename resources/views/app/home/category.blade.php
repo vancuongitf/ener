@@ -16,7 +16,7 @@
                             <img src="{{ url('file_storage/' . $post->image) }}" alt="{{$post->name}}">
                         </div>
                     @endif
-                    <a style="text-decoration:none;" href="{{ url('post/' . $post->route) }}"><h4 class="main-text-hover ellipse">{{ $post->name }}</h4></a>                    
+                    <a style="text-decoration:none;" href="{{ url('post/' . $post->route) }}"><h4 class="main-text-hover ellipse"><b>{{ $post->name }}</b></h4></a>                    
                     <p class="secondary-text" style="margin: 0px;">{{ $post->created_at }}</p>
                     <i class="main-text ellipse">{{ $post->description }}</i>
                     <div style="height:10px; width:1px;"></div>
