@@ -9,7 +9,7 @@
     
 @endsection
 @section('content')
-    <div class="row" style="padding: 10px; margin: 0px;">
+    <div class="row" style="margin: 0px;">
         <div class="col-lg-9">
             <div class="row row-eq-height" style="box-sizing:border-box;">
                 @foreach ($categories as $category)
