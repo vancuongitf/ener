@@ -2,10 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/enervn32/public_html/
-    - export CSSPATH=/home/enervn32/public_html/css/
-    - export JSPATH=/home/enervn32/public_html/js/
-    - export FILEPATH=/home/enervn32/public_html/file/
     - /bin/cp public/* $DEPLOYPATH
-    - /bin/cp public/css/* $CSSPATH
-    - /bin/cp public/file/* $FILEPATH
-    - /bin/cp public/js/* $JSPATH
+    - /bin/cp public/css/* /home/enervn32/public_html/css/
+    - /bin/cp public/file/* /home/enervn32/public_html/js/
+    - /bin/cp public/js/* /home/enervn32/public_html/file/
