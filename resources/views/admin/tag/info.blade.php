@@ -43,7 +43,9 @@
                 ?>
                 <input type="hidden" name="id" value="{{$tag->id}}">
                 <input type="hidden" name="level" value="{{$tag->level}}">
-                <input type="hidden" name="parent_id" value="{{$parent->id}}">
+                @if (isset($parent->id))
+                    <input type="hidden" name="parent_id" value="{{$parent->id}}">                    
+                @endif
                 <input id="new_tag_info_name" name="name" class="form-control margin-top-10" type="text" value="{{$tag->name}}" style="display:none;">
                 @if ($errors->first('name'))
                     <p class="red-text" style="font-size: 1rem;">Tag's name is required!</p>
