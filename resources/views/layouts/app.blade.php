@@ -31,9 +31,14 @@
     @yield('include-script')
 </head>
 
-<body style="box-sizing:border-box;">
-    <div style="box-sizing: border-box;">
+<body>
+    <div>
         @include('app.widget.header') 
+        <div style="padding:0px; margin:0px; display:">
+            <div style="box-sizing:border-box;height: 200px;width:100%; margin:20px; background-color:red; ">
+            
+            </div>             
+        </div>
         <div class="row" style="padding: 0px; margin: 0px; width: 100%;box-sizing:border-box; padding-bottom: 300px; min-height: 100%;">
             <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">
                 @yield('left-zone')
