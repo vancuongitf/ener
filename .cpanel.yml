@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/enervn32/ener-develop/
+    - /bin/cp * $DEPLOYPATH
