@@ -3,5 +3,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/enervn32/public_html/
     - /bin/cp -r public/* $DEPLOYPATH
-    - /bin/cd $DEPLOYPATH
-    - /bin/rename -f '/s/index.product.php/index.php' index.product.php
+    - /bin/rename -f 's/\.product.php$/\.php/' *.product.php
