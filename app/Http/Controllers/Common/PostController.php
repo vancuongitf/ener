@@ -101,7 +101,7 @@ class PostController extends Controller {
         $nextPageFlag = false;
         $posts = DB::table('posts')
             ->join('post_tags', 'posts.id', '=', 'post_tags.post_id')
-            ->select('posts.*')
+            ->select('posts.id', 'posts.name', 'posts.image', 'posts.created_at', 'posts.route', 'posts.route', 'posts.description')
             ->where($columnName, $id)
             ->where('posts.is_published', '1')
             ->orderBy('created_at', 'desc')
@@ -112,7 +112,7 @@ class PostController extends Controller {
             $nextPageFlag = true;
             $posts = DB::table('posts')
                 ->join('post_tags', 'posts.id', '=', 'post_tags.post_id')
-                ->select('posts.*')
+                ->select('posts.id', 'posts.name', 'posts.image', 'posts.created_at', 'posts.route', 'posts.route', 'posts.description')
                 ->where($columnName, $id)
                 ->where('posts.is_published', '1')
                 ->orderBy('created_at', 'desc')
