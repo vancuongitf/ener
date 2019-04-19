@@ -2,6 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/enervn32/public_html/
-    - export APPPATH=/home/enervn32/ener-laravel/
     - /bin/cp -r public/* $DEPLOYPATH
-    - /bin/cp -r * $APPPATH
