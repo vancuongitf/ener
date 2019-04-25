@@ -7,3 +7,4 @@ deployment:
     - /bin/cp -r public/css/* $DEPLOYPATHCSS
     - /bin/cp -r public/file/* $DEPLOYPATHFILE
     - /bin/cp -r public/js/* $DEPLOYPATHJS
+    - /bin/rm -rf /home/enervn32/ener-develop/.env
