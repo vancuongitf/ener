@@ -1,12 +1,8 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATHCSS=/home/enervn32/public_html/css/
-    - export DEPLOYPATHFILE=/home/enervn32/public_html/file/
-    - export DEPLOYPATHJS=/home/enervn32/public_html/js/
-    - /bin/cp -r public/css/* $DEPLOYPATHCSS
-    - /bin/cp -r public/file/* $DEPLOYPATHFILE
-    - /bin/cp -r public/js/* $DEPLOYPATHJS
+    - export DEPLOYPATH=/home/enervn32/public_html/
+    - /bin/cp -r public/* $DEPLOYPATH
     - /bin/rm -rf /home/enervn32/ener-develop/.env
     - /bin/mv -f /home/enervn32/ener-develop/.env-production /home/enervn32/ener-develop/.env
     - /bin/rm -rf /home/enervn32/public_html/index.php
