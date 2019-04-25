@@ -33,8 +33,9 @@
 
 <body>
     <div>
-        @include('app.widget.header') 
-        <div class="row" style="padding: 0px; margin: 0px; width: 100%;box-sizing:border-box; padding-bottom: 300px; min-height: 100%;">
+        @include('app.widget.header')
+        @yield('top-logo') 
+        <div class="row" style="padding: 0px; margin: 0px; width: 100%;box-sizing:border-box; min-height: 100%;">
             <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">
                 @yield('left-zone')
             </div>
@@ -42,9 +43,7 @@
                 @yield('content')
             </div>
         </div>
-        <div style="margin-top: -300px;" style="box-sizing:border-box;">
-            @include('app.widget.footer')
-        </div>
+        @include('app.widget.footer')
     </div>  
 </body>
 

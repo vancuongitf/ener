@@ -8,6 +8,13 @@
 @section('left-zone')
     
 @endsection
+@section('top-logo')
+    <div style="max-width: 100%;">
+        <div style="padding-bottom: 30%; position: relative;">
+            <img src="{{ url('/file/ener-cover.png') }}" style="width: 100%; height: 100%; position: absolute;">
+        </div>
+    </div>
+@endsection
 @section('content')
     <div class="row" style="margin: 0px;">
         <div class="col-lg-9">

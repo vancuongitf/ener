@@ -59,5 +59,23 @@
         <div class="clear">
 
         </div>
+    @else
+        <a class="remove-text-decoration main-text-hover" href=" {{ url('post/' . $post->route) }} ">
+            <div class="post-title-lg">
+                <h3 class="ellipse-3">{{ $post->name }}</h3>
+            </div>
+            <div class="post-title-sm">
+                <b class="ellipse-3">{{ $post->name }}</b>
+            </div>
+        </a>
+        @if ($post->description)
+            <div class="post-title-lg">
+                <i class="ellipse-3">{{ $post->description }}</i>
+            </div>
+        @endif
+        <p class="secondary-text">{{ $post->created_at }}</p>                
+        <div class="clear">
+
+        </div>
     @endif
 </div>
