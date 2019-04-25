@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/enervn32/public_html/
-    - /bin/cp -r * /home/enervn32/ener-develop
+    - /bin/cp -r * /home/enervn32/ener-develop/
     - /bin/cp -r public/* $DEPLOYPATH
     - /bin/rm -rf /home/enervn32/ener-develop/.env
     - /bin/mv -f /home/enervn32/ener-develop/.env-production /home/enervn32/ener-develop/.env
