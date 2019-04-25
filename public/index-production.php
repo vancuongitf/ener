@@ -34,7 +34,7 @@ require __DIR__. '/../ener-develop/vendor/autoload.php';
 |
 */
 
-$app = require_once __DIR__.env('BOOSTRAP_APP_INDEX', '/../bootstrap/app.php');
+$app = require_once __DIR__.'/../ener-develop/bootstrap/app.php';
 
 /*
 |--------------------------------------------------------------------------
