@@ -22,15 +22,16 @@ class PostController extends Controller {
     }
 
     public function getHome() {
-        $categories = array();
-        $tag1s = TagLevel1::all();
-        foreach ($tag1s as $tag1) {
-            $tag1->posts = PostController::getCategoryPosts($tag1->id, 1);
-            if (count($tag1->posts) > 0) {
-                array_push($categories, $tag1);
-            }
-        }
-        return view('app.home.home')->with('categories', $categories);
+        // $categories = array();
+        // $tag1s = TagLevel1::all();
+        // foreach ($tag1s as $tag1) {
+        //     $tag1->posts = PostController::getCategoryPosts($tag1->id, 1);
+        //     if (count($tag1->posts) > 0) {
+        //         array_push($categories, $tag1);
+        //     }
+        // }
+        $posts = Post::where('is_published', 1)->get();
+        return view('app.home.home')->with('posts', $posts);
     }
 
     public function getPostDetail(Request $request) {

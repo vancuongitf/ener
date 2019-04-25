@@ -28,7 +28,8 @@
 @endsection
 
 @section('left-zone')
-
+    <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">
+    </div>
 @endsection
 
 @section('content')

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    @yield('meta-data')
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -35,14 +35,14 @@
     <div>
         @include('app.widget.header')
         @yield('top-logo') 
+        @yield('high-light-zone')
         <div class="row" style="padding: 0px; margin: 0px; width: 100%;box-sizing:border-box; min-height: 100%;">
-            <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">
-                @yield('left-zone')
-            </div>
+            @yield('left-zone')
             <div class="col-md-12 col-lg-10" style="box-sizing:border-box; margin: 0px; padding: 0px;">
                 @yield('content')
             </div>
         </div>
+        @yield('home-content')
         @include('app.widget.footer')
     </div>  
 </body>
