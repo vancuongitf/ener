@@ -15,6 +15,9 @@
         margin-right: auto !important;
     }
 </style>
+@section('include-script')
+    <script src="{{url('js/post-view.js')}}"></script>
+@endsection
 @section('page-title')
     {{ $post->name }}
 @endsection
@@ -30,6 +33,10 @@
     </div>
 @endsection
 @section('content')
+<script>
+    postId = {{$post->id}};
+    console.log(postId);
+</script>
 <div class="post-content">
     <div class="row" style="margin: 0px; padding: 0px;">
         <div class="col-lg-8" style="padding: 0px 30px; box-sizing:border-box !important;">

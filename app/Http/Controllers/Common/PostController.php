@@ -9,7 +9,9 @@ use App\Model\Tag\PostTag;
 use App\Model\Tag\TagLevel1;
 use App\Model\Tag\TagLevel2;
 use App\Model\Tag\TagLevel3;
+use App\Model\PostView;
 use App\Model\Util\IntSet;
+use App\Model\Response\StatusResponse;
 use Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -23,8 +25,7 @@ class PostController extends Controller {
 
     public function getHome() {
         $posts = Post::where('is_published', 1)->get();
-        $mac = MacAddress::getCurrentMacAddress('eth0');
-        return view('app.home.home')->with('posts', $posts)->with('mac', $mac);
+        return view('app.home.home')->with('posts', $posts);
     }
 
     public function getPostDetail(Request $request) {
@@ -77,6 +78,24 @@ class PostController extends Controller {
             'tag3' => $tag3,
             'categoryPosts' => $categoryPosts
         ]);
+    }
+
+    public function addPostView() {
+        $postId = Route::current()->parameter('id');
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $postView = PostView::create([
+            'post_id' => $postId,
+            'ip' => $ip
+        ]);
+        if ($postView != null) {
+            return json_encode(new StatusResponse([
+                'status' => 'success'
+            ]));
+        } else {
+            return json_encode(new StatusResponse([
+                'status' => 'fail'
+            ])); 
+        }
     }
 
     private static function getCategoryPostsWithPage($id, $level, $page) {

@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::post("/view/{id}", "Common\PostController@addPostView");
 Route::get("/tags", "Common\TagController@getTags");
 Route::prefix('admin')->group(function() {
     Route::prefix('tag')->group(function() {
