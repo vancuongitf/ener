@@ -2,4 +2,8 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/enervn32/public_html/
+    - /bin/rm -r /home/enervn32/ener-develop/*
     - /bin/cp -r * /home/enervn32/ener-develop/
+    - /bin/cp -r public/* $DEPLOYPATH
+    - /bin/rm -rf /home/enervn32/public_html/index.php
+    - /bin/mv -f /home/enervn32/public_html/index-production.php /home/enervn32/public_html/index.php
