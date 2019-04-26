@@ -18,7 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get("/tags", "Common\TagController@getTags");
-
 Route::prefix('admin')->group(function() {
     Route::prefix('tag')->group(function() {
         Route::get('childs/{level}/{id}', "Admin\TagController@getTagChilds");

@@ -18,6 +18,13 @@
 @section('page-title')
     {{ $post->name }}
 @endsection
+@section('meta-data')
+    <meta property="og:image" content="{{url('file/ener.png')}}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://ener.vn"/>
+    <meta property="og:title" content="Nơi Giúp Bạn Hoàn Thiện Bản Thân Mình"/>
+    <meta property="og:description" content="skajdh skjdha sdkjasbd askdbas kdas dkjas dkas dkjas dkjas dkjas dj asjkd askjd askjd jkas dkjas dkjasd kasd kajs"/> 
+@endsection
 @section('left-zone')
     <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">
     </div>
