@@ -55,7 +55,7 @@
                 <i class="ellipse-3">{{ $post->description }}</i>
             </div>
         @endif
-        <p class="secondary-text createdTime">{{ $post->created_at }}</p>                
+        <p class="secondary-text">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>                
         <div class="clear">
 
         </div>
@@ -73,7 +73,7 @@
                 <i class="ellipse-3">{{ $post->description }}</i>
             </div>
         @endif
-        <p class="secondary-text">{{ $post->created_at }}</p>                
+        <p class="secondary-text">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>                
         <div class="clear">
 
         </div>

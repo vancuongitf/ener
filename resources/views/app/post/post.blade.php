@@ -41,7 +41,7 @@
     <div class="row" style="margin: 0px; padding: 0px;">
         <div class="col-lg-8" style="padding: 0px 30px; box-sizing:border-box !important;">
             <h1><b>{{$post->name}}</b></h1>
-            <p class="secondary-text">{{$post->created_at}}</p>
+            <p class="secondary-text">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>
             <b>{{$post->description}}</b> 
             {!!$post->content!!}
         </div>
@@ -58,7 +58,7 @@
                             </div>
                         @endif
                         <a class="main-text-hover remove-text-decoration ellipse" href="{{ url('post/' . $relativePost->route) }}"><b>{{ $relativePost->name }}</b></a>              
-                        <p class="secondary-text" style="margin: 0px">{{ $relativePost->created_at }}</p>
+                        <p class="secondary-text" style="margin: 0px">{{date("d-m-Y", strtotime($relativePost->created_at))}}</p>
                         <div class="clear"></div>                    
                     </div>
                 @endforeach

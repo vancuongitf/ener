@@ -6,7 +6,7 @@
         </div>
     @endif
     <a class="remove-text-decoration" href="{{url('post/' . $post->route)}}"><h3 class="main-text ellipse-3" style="text-align: center;">{{$post->name}}</h3></a>
-    <p class="ellipse-1 secondary-text" style="text-align: center">{{$post->created_at}}</p>
+    <p class="ellipse-1 secondary-text" style="text-align: center">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>
     <p class="ellipse-3">{{$post->description}}</p>
     </div>
 </div>
