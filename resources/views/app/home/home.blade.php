@@ -42,7 +42,6 @@
     </div>
 @endsection --}}
 @section('home-content')
-    <div>asdasdasd</div>
     <div class="row border-box">
         <div class="ads-side-zone col-lg-2">
         </div>
