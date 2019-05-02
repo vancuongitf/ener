@@ -13,6 +13,8 @@
 
 Route::get('/', 'Common\PostController@getHome');
 Route::get("post/{route}", "Common\PostController@getPostDetail");
+Route::get('/login', 'Common\LoginController@redirectToProvider');
+Route::get('/callback', 'Common\LoginController@handleCallback');
 Route::prefix('admin')->group(function () {
     Route::get('/notpublish/{page?}', 'Admin\AdminController@showNotPublishPost')->middleware('admin');
     Route::get('/login', 'Admin\AdminController@showLoginForm')->middleware('admin-home');

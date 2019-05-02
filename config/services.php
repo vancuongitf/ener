@@ -43,5 +43,9 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
-
+    'google' => [
+        'client_id' => '65097918961-3evaksedeif58an6ulinl857ij2jbrsn.apps.googleusercontent.com',
+        'client_secret' => 'FZh-aQuh1yLNl7PKYJ7rX2q_',
+        'redirect' => 'http://ener.vn/callback'
+    ]
 ];
