@@ -29,5 +29,5 @@ Route::prefix('admin')->group(function() {
         Route::delete('tag/{id}', "Admin\PostController@removePostTag");
         Route::put('publish/{id}', "Admin\PostController@publishPost");
     });
-    Route::get('google/user', "Admin\AdminController@addGoogleUser");
+    Route::post('google/user', "Admin\AdminController@addGoogleUser");
 });
