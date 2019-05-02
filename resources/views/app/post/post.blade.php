@@ -39,6 +39,7 @@
     console.log(postId);
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
+        $('#avatar-user').attr('src', profile.getImageUrl());
         console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
         console.log('Name: ' + profile.getName());
         console.log('Image URL: ' + profile.getImageUrl());
@@ -52,7 +53,23 @@
             <p class="secondary-text">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>
             <b>{{$post->description}}</b> 
             {!!$post->content!!}
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <div class="row">
+            <div class="dashed-bg" style="width: 100%; height: 10px;"></div>
+            <div class="clear-css">
+            </div>
+            <div class="row" style="width: 100%; margin: 0px; padding: 0px; margin-top: 20px; margin-bottom: 20px;">
+                <div class="d-flex justify-content-between" style="width: 100%;">
+                    <h4>Bình luận</h4>
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
+                <div class="clear-css"></div>
+                <div class="d-flex justify-content-start" style="width: 100%; padding: 10px;">
+                    <img id="user-avatar" src="{{ url('file/default-avatar.jpg') }}" style="width: 50px; height: 50px; margin-right: 20px !important;">
+                    <textarea name="" id="" cols="500" rows="3" maxlength="1000"></textarea>
+                </div>
+                <button class="btn btn-primary" style="margin-left: 80px;">Đăng bình luận</button>
+            </div>
+        </div>
         </div>
         <div class="col-lg-4" style="padding: 0px 30px;">
                 @if (count($relativePosts)>0)
