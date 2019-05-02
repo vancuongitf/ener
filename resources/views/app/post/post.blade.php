@@ -17,6 +17,7 @@
 </style>
 @section('include-script')
     <script src="{{url('js/post-view.js')}}"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 @endsection
 @section('page-title')
     {{ $post->name }}
@@ -36,6 +37,13 @@
 <script>
     postId = {{$post->id}};
     console.log(postId);
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
 </script>
 <div class="post-content">
     <div class="row" style="margin: 0px; padding: 0px;">
@@ -44,6 +52,7 @@
             <p class="secondary-text">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>
             <b>{{$post->description}}</b> 
             {!!$post->content!!}
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
         </div>
         <div class="col-lg-4" style="padding: 0px 30px;">
                 @if (count($relativePosts)>0)

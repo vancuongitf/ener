@@ -8,7 +8,12 @@ use Socialite;
 
 class LoginController extends Controller {
     public function redirectToProvider() {
-        return Socialite::driver('google')->redirect();
+        try {
+            $user = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return Socialite::driver('google')->redirect();
+        }
+        return json_encode($user);
     }
 
     public function handleCallback() {

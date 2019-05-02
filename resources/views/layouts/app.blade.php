@@ -7,6 +7,7 @@
     @yield('meta-data')
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="google-signin-client_id" content="65097918961-1vrh67hgbve08fl4u5heole4ovveu835.apps.googleusercontent.com">
 
     <title>@yield('page-title')</title>
 
