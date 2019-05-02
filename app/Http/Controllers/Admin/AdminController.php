@@ -87,24 +87,22 @@ class AdminController extends Controller
     }
 
     public function addGoogleUser(Request $request) {
-        $email = $request->get('email');
-        $name = $request->get('name');
-        $image = $request->get('image');
-        $existUser = GoogleUser::where('email', $email)->first();
+        $user = json_decode($request->getContent());  
+        $existUser = GoogleUser::where('email', $user->U3)->first();
         if ($existUser != null) {
             GoogleUser::where('id', $exist->id)
                 ->update([
-                    'name' => $name,
-                    'image' => $image
+                    'name' => $user->ig,
+                    'image' => $user->Paa
                 ]);
         } else {
             GoogleUser::create([
-                'email' => $email,
-                'name' => $name,
-                'image' => $image
+                'email' => $user->U3,
+                'name' => $user->ig,
+                'image' => $user->Paa
             ]);
         }
-        return json_encode(GoogleUser::where('email', $email)->first());        
+        return json_encode(GoogleUser::where('email', $user->U3)->first());        
     }
 
     /**

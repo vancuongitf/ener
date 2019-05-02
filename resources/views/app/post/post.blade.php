@@ -42,15 +42,11 @@
         $('#user-avatar').attr('src', profile.getImageUrl());
         $.ajax({
             type: 'POST',
-            url: '/api/admin/google/user'
-            data: {
-                email: profile.getEmail(),
-                name: profile.getName(),
-                image: profile.getImageUrl()
-            }
+            url: '/api/admin/google/user',
+            data: JSON.stringify(profile),
             success: function(msg) {
                 console.log(msg);
-            }
+            },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status);
                 alert(thrownError);
