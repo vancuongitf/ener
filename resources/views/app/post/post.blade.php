@@ -39,11 +39,23 @@
     console.log(postId);
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
-        $('#avatar-user').attr('src', profile.getImageUrl());
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        $('#user-avatar').attr('src', profile.getImageUrl());
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/google/user'
+            data: {
+                email: profile.getEmail(),
+                name: profile.getName(),
+                image: profile.getImageUrl()
+            }
+            success: function(msg) {
+                console.log(msg);
+            }
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+            }
+        });
     }
 </script>
 <div class="post-content">

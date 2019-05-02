@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Auth;
 use Route;
 use App\Model\Post;
+use App\Model\GoogleUser;
 
 class AdminController extends Controller
 {
@@ -83,6 +84,27 @@ class AdminController extends Controller
             return $this->sendLoginResponse($request);
         }
         return $this->sendFailedLoginResponse($request);
+    }
+
+    public function addGoogleUser(Request $request) {
+        $email = $request->get('email');
+        $name = $request->get('name');
+        $image = $request->get('image');
+        $existUser = GoogleUser::where('email', $email)->first();
+        if ($existUser != null) {
+            GoogleUser::where('id', $exist->id)
+                ->update([
+                    'name' => $name,
+                    'image' => $image
+                ]);
+        } else {
+            GoogleUser::create([
+                'email' => $email,
+                'name' => $name,
+                'image' => $image
+            ]);
+        }
+        return json_encode(GoogleUser::where('email', $email)->first());        
     }
 
     /**
