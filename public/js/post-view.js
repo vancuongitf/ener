@@ -38,7 +38,7 @@ function addPostToComment(content) {
     isCommenting = true;
     $('#btn-comment').hide();
     $('#btn-commenting').show();
-    var dataJson = '{ '.concat('"post_id": "', postId, '", "user_google_id": "', 2, '", "content": "', content, '", "max_id": "', maxId, '"}');
+    var dataJson = '{ '.concat('"post_id": "', postId, '", "user_google_id": "', user.id, '", "content": "', content, '", "max_id": "', maxId, '"}');
     jQuery.ajax({
         type: 'POST',
         url: '/api/post/'.concat(postId).concat('/comments'),
