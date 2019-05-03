@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Route;
 use App\Model\Post;
 use App\Model\Comment;
+use App\Model\GoogleUser;
 use App\Model\Tag\PostTag;
 use App\Model\Tag\TagLevel1;
 use App\Model\Response\StatusResponse;
@@ -181,7 +182,16 @@ class PostController extends Controller {
             'user_google_id' => $commentBody->user_google_id,
             'content' => $commentBody->content
         ]);
-        $comments = $this->getPostComment($comment->post_id, true, $comment->max_id);
+        $comments = Comment::where('post_id', $commentBody->post_id)
+            ->where('id', '>', $commentBody->max_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        if ($comments == null) {
+            $comments = array();
+        }
+        foreach($comments as $comment) {
+            $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
+        }
         if ($comment != null) {
             $response = new StatusResponse([
                 $status = 'success'
@@ -214,31 +224,28 @@ class PostController extends Controller {
         $response = new StatusResponse([
             'status' => 'success'
         ]);
+        $cms = array();
+        for ($i=0; $i < 10 && $i < count($comments); $i++) { 
+            array_push($cms, $comments[$i]);
+        }
         if (count($comments) > 10) {
-            array_splice($comments, 10, 1);
             $response->next_page_flag = true;
         } else {
             $response->next_page_flag = false;
         }
-
-        if(count($comments) > 0) {
-            $response->max_id = $comments[0]->id;
-            $response->min_id = $comments[count($comments) - 1]->id;
-            $response->comments = array_reverse($comments);
+        foreach($cms as $comment) {
+            $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
+        }
+        if(count($cms) > 0) {
+            $response->max_id = $cms[0]->id;
+            $response->min_id = $cms[count($cms) - 1]->id;
+            $response->comments = $cms;
         } else {
             $response->max_id = -1;
-            $response->min_id = -1;
+            $response->min_id = $syncId;
             $response->comments = array();
         }
         return json_encode($response);
-    }
-
-    private function getPostComment($postId, $syncId) {
-        $comments = Comment::where('post_id', $postId)
-            ->where('id', '>', $syncId)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return $comments;
     }
 
     private function saveImage($file) {

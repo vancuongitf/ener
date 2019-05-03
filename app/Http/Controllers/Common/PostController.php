@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Common;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Post;
+use App\Model\Comment;
+use App\Model\GoogleUser;
 use App\Model\Tag\PostTag;
 use App\Model\Tag\TagLevel1;
 use App\Model\Tag\TagLevel2;
@@ -37,6 +39,7 @@ class PostController extends Controller {
     public function getPostDetail(Request $request) {
         $route = Route::current()->parameter('route');
         $post = Post::where('route', $route)->where('is_published', '1')->first();
+        $post->comment = $this->getPostComments($post->id);
         $post->view_count = PostController::getPostViewCount($post->id, $post->created_at);
         if ($post != null) {
             return view('app.post.post')->with([
@@ -278,6 +281,38 @@ class PostController extends Controller {
         $count = DB::table('post_views')->selectRaw('*, count(*)')->groupBy('post_id')->where('post_id', $postId)->count();
         // return $count + $defaultView;
         return $count;
+    }
+
+    private function getPostComments($postId) {
+        $comments = Comment::where('post_id', $postId)
+            ->orderBy('created_at', 'desc')
+            ->take(11)
+            ->get();
+        $response = new StatusResponse([
+            'status' => 'success'
+        ]);
+        $cms = array();
+        for ($i=0; $i < 10 && $i < count($comments); $i++) { 
+            array_push($cms, $comments[$i]);
+        }
+        if (count($comments) > 10) {
+            $response->next_page_flag = true;
+        } else {
+            $response->next_page_flag = false;
+        }
+        foreach($cms as $comment) {
+            $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
+        }
+        if(count($comments) > 0) {
+            $response->max_id = $cms[0]->id;
+            $response->min_id = $cms[count($cms) - 1]->id;
+            $response->comments = $cms;
+        } else {
+            $response->max_id = -1;
+            $response->min_id = -1;
+            $response->comments = array();
+        }
+        return $response;
     }
 }
 
