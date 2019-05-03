@@ -79,6 +79,27 @@ class AdminController extends Controller
         return view('admin.home')->with('posts', $posts)->with('showNotPublishButton', false)->with('haveNextPage', $haveNextPage)->with('page', $page);
     }
 
+    public function getUsers() {
+        $page = Route::current()->parameter('page');
+        $haveNextPage = false;
+        if ($page == null) {
+            $page = 1;
+        } 
+        $eloquentRs = GoogleUser::where('id', '>', 0)
+        ->skip(($page - 1) * 31)
+        ->take(31)
+        ->orderBy('id', 'desc')
+        ->get();
+        $next_page_flag = count($eloquentRs) > 30;
+        $users = array();
+        for ($i=0; $i < 30 && $i < count($eloquentRs); $i++) { 
+            array_push($users, $eloquentRs[$i]);
+        }
+        return view('admin.user.user')->with('users', $users)
+            ->with('page', $page)
+            ->with('haveNextPage', $next_page_flag);
+    }
+
     public function login(Request $request) {
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);

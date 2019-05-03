@@ -31,6 +31,9 @@
         <li class="nav-item">
             <a class="nav-link white-text-hover" href="{{url('admin/tag')}}">Post Tags</a>
         </li>
+        <li class="nav-item">
+                <a class="nav-link white-text-hover" href="{{url('admin/users')}}">Users</a>
+            </li>
     </ul>
     <div class="form-inline my-2 my-lg-0">
         <input id="search_input" type="text" class="form-control" >

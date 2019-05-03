@@ -21,6 +21,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', 'Admin\AdminController@login');
     Route::get('/logout', 'Admin\AdminController@logout');
     Route::get('/search', 'Admin\AdminController@search')->middleware('admin');
+    Route::get('/users/{page?}', 'Admin\AdminController@getUsers')->middleware('admin');
     Route::prefix('post')->group(function () {
         Route::get('info/{id}', 'Admin\PostController@showPostInfo')->middleware('admin');
         Route::post('info/{id}', 'Admin\PostController@updatePostInfo')->middleware('admin');
