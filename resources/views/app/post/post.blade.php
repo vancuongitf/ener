@@ -61,7 +61,7 @@
     }
     minId = {{$post->comment->min_id}};
     maxId = {{$post->comment->max_id}};
-    nextPageFlag = {{$post->comment->next_page_flag}};
+    nextPageFlag = <?php if($post->comment->next_page_flag) echo 'true'; else echo 'false';?>;
 </script>
 <div class="post-content">
     <div class="row" style="margin: 0px; padding: 0px;">

@@ -295,11 +295,7 @@ class PostController extends Controller {
         for ($i=0; $i < 10 && $i < count($comments); $i++) { 
             array_push($cms, $comments[$i]);
         }
-        if (count($comments) > 10) {
-            $response->next_page_flag = true;
-        } else {
-            $response->next_page_flag = false;
-        }
+        $response->next_page_flag = false;
         foreach($cms as $comment) {
             $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
         }

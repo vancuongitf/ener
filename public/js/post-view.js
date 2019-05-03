@@ -3,6 +3,7 @@ var isCommenting = false;
 var maxId = -1;
 var minId = -1;
 var user = null;
+var nextPageFlag = false;
 $(document).ready( function() {
     setTimeout(function() {
         jQuery.ajax({
