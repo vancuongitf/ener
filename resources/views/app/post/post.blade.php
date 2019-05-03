@@ -36,7 +36,6 @@
 @section('content')
 <script>
     postId = {{$post->id}};
-    console.log(postId);
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         $('#user-avatar').attr('src', profile.getImageUrl());
@@ -45,13 +44,20 @@
             url: '/api/admin/google/user',
             data: JSON.stringify(profile),
             success: function(msg) {
-                console.log(msg);
+                user = JSON.parse(msg);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status);
-                alert(thrownError);
+                user = null;
             }
         });
+    }
+
+    function commentSubmit() {
+        if (user != null) {
+            addPostToComment($('#comment').val());
+        } else {
+            $('.abcRioButtonContentWrapper').first().click();
+        }
     }
 </script>
 <div class="post-content">
@@ -73,10 +79,11 @@
                 <div class="clear-css"></div>
                 <div class="d-flex justify-content-start" style="width: 100%; padding: 10px;">
                     <img id="user-avatar" src="{{ url('file/default-avatar.jpg') }}" style="width: 50px; height: 50px; margin-right: 20px !important;">
-                    <textarea name="" id="" cols="500" rows="3" maxlength="1000"></textarea>
+                    <textarea name="" id="comment" cols="500" rows="3" maxlength="1000"></textarea>
                 </div>
-                <button class="btn btn-primary" style="margin-left: 80px;">Đăng bình luận</button>
+                <button class="btn btn-primary" style="margin-left: 80px;" onclick="commentSubmit()">Đăng bình luận</button>
             </div>
+            <div class="dashed-bg" style="width: 100%; height: 10px; margin-bottom: 20px;"></div>
         </div>
         </div>
         <div class="col-lg-4" style="padding: 0px 30px;">

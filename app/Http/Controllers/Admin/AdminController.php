@@ -90,7 +90,7 @@ class AdminController extends Controller
         $user = json_decode($request->getContent());  
         $existUser = GoogleUser::where('email', $user->U3)->first();
         if ($existUser != null) {
-            GoogleUser::where('id', $exist->id)
+            GoogleUser::where('id', $existUser->id)
                 ->update([
                     'name' => $user->ig,
                     'image' => $user->Paa
