@@ -142,7 +142,7 @@ function likeClicked() {
     var likeIcon = '';
     
     if (user != null) {
-        $.getJSON('api/comment/'.concat(postId, '/like/', user.id), function(data) {
+        $.getJSON('/api/comment/'.concat(postId, '/like/', user.id), function(data) {
             if (data.like_flag) {
                 likeIcon = baseUrl.concat('/file/like_red.png');
             } else {
