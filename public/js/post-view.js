@@ -16,7 +16,6 @@ $(document).ready( function() {
             },
             success: function( msg ) {
                 var objJSON = JSON.parse(msg);
-                console.log(objJSON.status);
             }
         });
     }, 5000);
@@ -137,12 +136,12 @@ function viewMoreComments() {
     });
 }
 
-function likeClicked() {
+function likeClicked($commentId) {
     var baseUrl = window.location.origin;
     var likeIcon = '';
     
     if (user != null) {
-        $.getJSON('/api/comment/'.concat(postId, '/like/', user.id), function(data) {
+        $.getJSON('/api/comment/'.concat(commentId, '/like/', user.id), function(data) {
             if (data.like_flag) {
                 likeIcon = baseUrl.concat('/file/like_red.png');
             } else {
@@ -150,7 +149,7 @@ function likeClicked() {
             }
             $('#like-'.concat(data.comment_id)).attr('src', likeIcon);
             if (data.like_count > 0) {
-                $('#like-count-'.concat(data.comment_id)).val(data.like_count.concat(' Like'));
+                $('#like-count-'.concat(data.comment_id)).val(data.like_count.toString().concat(' Like'));
             } else {
                 $('#like-count-'.concat(data.comment_id)).val('');
             }

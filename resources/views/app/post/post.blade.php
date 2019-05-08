@@ -64,7 +64,7 @@
     function getLikeFlag() {
         $.getJSON('/api/post/'.concat(postId, '/like/').concat(user.id), function(data){
             data.forEach(like => {
-                $('#like-'.concat(like.comment_id)).attr('src', '{{ url("file/like-red.png") }}');
+                $('#like-'.concat(like.comment_id)).attr('src', '{{ url("/file/like-red.png") }}');
             });
         });
     }
@@ -117,7 +117,7 @@
                                 <p class="secondary-text" style="margin: 5px 0px 0px 0px;">{{$comment->created_at}}</p>
                                 <p class="main-text" style="margin: 5px 0px 0px 0px;">{{$comment->content}}</p>
                                 <div class="d-flex">
-                                    <img id="like-{{$comment->id}}" class="button" src="{{ url('file/like-grey.png') }}" onclick="likeClicked()" style="width: 22px; height: 22px; margin: 0px !important; margin-right: 30px !important;">
+                                    <img id="like-{{$comment->id}}" class="button" src="{{ url('file/like-grey.png') }}" onclick="likeClicked({{$comment->id}})" style="width: 22px; height: 22px; margin: 0px !important; margin-right: 30px !important;">
                                     <img class="button" src="{{ url('file/reply.png') }}" style="width: 22px; height: 22px; margin: 0px !important;">                                
                                 </div>
                             </div>  
