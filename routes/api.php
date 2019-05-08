@@ -18,8 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post("/view/{id}", "Common\PostController@addPostView");
 Route::get("/tags", "Common\TagController@getTags");
-Route::get('post/{postId}/comments/{syncId}', "Admin\PostController@getPostComments");
-Route::post('post/{postId}/comments', "Admin\PostController@addCommentToPost");
+Route::prefix('post/{postId}')->group(function(){
+    Route::get('comments/{syncId}/user/{userId?}', "Admin\PostController@getPostComments");
+    Route::post('comments', "Admin\PostController@addCommentToPost");
+    Route::get('like/{userId}', "Admin\PostController@getLikeFlag");
+});
+Route::prefix('comment/{id}')->group(function() {
+    Route::get('like/{userId}', 'Admin\PostController@likeComment');
+});
 Route::prefix('admin')->group(function() {
     Route::prefix('tag')->group(function() {
         Route::get('childs/{level}/{id}', "Admin\TagController@getTagChilds");

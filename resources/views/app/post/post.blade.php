@@ -45,6 +45,7 @@
             data: JSON.stringify(profile),
             success: function(msg) {
                 user = JSON.parse(msg);
+                getLikeFlag();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 user = null;
@@ -56,8 +57,16 @@
         if (user != null) {
             addPostToComment($('#comment').val());
         } else {
-            $('.abcRioButtonContentWrapper').first().click();
+            loginConfirm();
         }
+    }
+
+    function getLikeFlag() {
+        $.getJSON('/api/post/'.concat(postId, '/like/').concat(user.id), function(data){
+            data.forEach(like => {
+                $('#like-'.concat(like.comment_id)).attr('src', '{{ url("file/like-red.png") }}');
+            });
+        });
     }
     minId = {{$post->comment->min_id}};
     maxId = {{$post->comment->max_id}};
@@ -91,13 +100,27 @@
                 </button>
                 <div id="comment-zone" class="row" style="width: 100%; margin: 0px; padding: 0px; margin-top: 20px;">
                     @foreach ($post->comment->comments as $comment)
+                        <script>
+                            commentIds.push({{$comment->id}});
+                        </script>
                         <div class="d-flex" style="width: 100%; padding: 10px;">
                             <img id="user-avatar" src="{{ $comment->user->image }}" style="width: 50px; height: 50px; margin: 0px !important; margin-right: 20px !important;">
-                            <div style="width: 100%; border-bottom: 1px solid #EEEEEE;">
-                                <b>{{$comment->user->name}}</b>
+                            <div style="width: 100%; border-bottom: 1px solid #EEEEEE; padding-bottom: 10px;">
+                                <div class="d-flex justify-content-between">
+                                    <b>{{$comment->user->name}}</b>
+                                    <b id="like-count-{{$comment->id}}" style="margin: 0px; color: blue;">
+                                            @if ($comment->like_count > 0)
+                                                {{$comment->like_count}} Like
+                                            @endif
+                                        </b>                                                                                    
+                                </div>
                                 <p class="secondary-text" style="margin: 5px 0px 0px 0px;">{{$comment->created_at}}</p>
                                 <p class="main-text" style="margin: 5px 0px 0px 0px;">{{$comment->content}}</p>
-                            </div>                            
+                                <div class="d-flex">
+                                    <img id="like-{{$comment->id}}" class="button" src="{{ url('file/like-grey.png') }}" onclick="likeClicked()" style="width: 22px; height: 22px; margin: 0px !important; margin-right: 30px !important;">
+                                    <img class="button" src="{{ url('file/reply.png') }}" style="width: 22px; height: 22px; margin: 0px !important;">                                
+                                </div>
+                            </div>  
                         </div>
                     @endforeach
                 </div>

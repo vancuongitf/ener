@@ -4,6 +4,7 @@ var maxId = -1;
 var minId = -1;
 var user = null;
 var nextPageFlag = false;
+var commentIds = [];
 $(document).ready( function() {
     setTimeout(function() {
         jQuery.ajax({
@@ -23,11 +24,30 @@ $(document).ready( function() {
     $('#btn-commenting').hide();
 });
 function renderCommentView(comment) {
+    var baseUrl = window.location.origin;
+    var likeIcon = '';
+    if (comment.like_flag) {
+        likeIcon = baseUrl.concat('/file/like_red.png');
+    } else {
+        likeIcon = baseUrl.concat('/file/like_grey.png');
+    }
     var html = '';
     html = html.concat('<div class="d-flex" style="width: 100%; padding: 10px;">', '<img id="user-avatar" src="', comment.user.image, '" style="width: 50px; height: 50px; margin: 0px !important; margin-right: 20px !important;">', '<div style="width: 100%; border-bottom: 1px solid #EEEEEE;">');
+    html = html.concat('<div class="d-flex justify-content-between">');
     html = html.concat('<b>', comment.user.name ,'</b>');
+    if (comment.like_count > 0) {
+        html = html.concat('<b id="like-count-' , comment.id, '" style="margin: 0px; color: blue;">', comment.like_count, 'Like</b>');
+    } else {
+        html = html.concat('<b id="like-count-' , comment.id, '" style="margin: 0px; color: blue;"></b>');        
+    }
+    html = html.concat('</div>')
     html = html.concat('<p class="secondary-text" style="margin: 5px 0px 0px 0px;">', comment.created_at,'</p>');
-    html = html.concat('<p class="main-text" style="margin: 5px 0px 0px 0px;">', comment.content, '</p></div></div>');
+    html = html.concat('<p class="main-text" style="margin: 5px 0px 0px 0px;">', comment.content, '</p>');
+    html = html.concat('<div class="d-flex">');
+    html = html.concat('<img id="like-{{$comment->id}}" class="button" src="', likeIcon,'" onclick="likeClicked()" style="width: 22px; height: 22px; margin: 0px !important; margin-right: 30px !important;">');
+    html = html.concat('<img class="button" src="', baseUrl.concat('/file/reply.png'),'" style="width: 22px; height: 22px; margin: 0px !important;">');
+    html = html.concat('</div>');
+    html = html.concat('</div></div>');
     return html;   
 }
 
@@ -80,9 +100,14 @@ function viewMoreComments() {
     isLoadingComment = true;
     $('#loading-view').show();
     $('#view-more-commtent').hide();
+    var commentUrl = '';
+    commentUrl = '/api/post/'.concat(postId, '/comments/', minId, '/user');        
+    if (user != null) {
+        commentUrl = commentUrl.concat('/', user.id);
+    } 
     jQuery.ajax({
         type: 'GET',
-        url: '/api/post/'.concat(postId, '/comments/', minId),
+        url: commentUrl,
         crossDomain: true,
         xhrFields: { 
             withCredentials: true
@@ -107,6 +132,43 @@ function viewMoreComments() {
             $('#loading-view').hide();
             if (nextPageFlag) {
                 $('#view-more-commtent').show();
+            }
+        }
+    });
+}
+
+function likeClicked() {
+    var baseUrl = window.location.origin;
+    var likeIcon = '';
+    
+    if (user != null) {
+        $.getJSON('api/comment/'.concat(postId, '/like/', user.id), function(data) {
+            if (data.like_flag) {
+                likeIcon = baseUrl.concat('/file/like_red.png');
+            } else {
+                likeIcon = baseUrl.concat('/file/like_grey.png');
+            }
+            $('#like-'.concat(data.comment_id)).attr('src', likeIcon);
+            if (data.like_count > 0) {
+                $('#like-count-'.concat(data.comment_id)).val(data.like_count.concat(' Like'));
+            } else {
+                $('#like-count-'.concat(data.comment_id)).val('');
+            }
+        });
+    } else {
+        loginConfirm();
+    }
+}
+
+function loginConfirm() {
+    $.confirm({
+        title: 'Thông Báo!',
+        content: 'Vui lòng đăng nhập để sử dụng chức năng này!',
+        buttons: {
+            ok: function () {
+                $('.abcRioButtonContentWrapper').first().click();
+            },
+            cancel: function () {
             }
         }
     });

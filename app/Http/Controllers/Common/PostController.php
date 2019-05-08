@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Post;
 use App\Model\Comment;
+use App\Model\CommentLike;
 use App\Model\GoogleUser;
 use App\Model\Tag\PostTag;
 use App\Model\Tag\TagLevel1;
@@ -298,6 +299,7 @@ class PostController extends Controller {
         $response->next_page_flag = false;
         foreach($cms as $comment) {
             $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
+            $comment->like_count = CommentLike::where('comment_id', $comment->id)->get()->count();
         }
         if(count($comments) > 0) {
             $response->max_id = $cms[0]->id;
