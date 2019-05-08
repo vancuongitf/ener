@@ -143,15 +143,15 @@ function likeClicked($commentId) {
     if (user != null) {
         $.getJSON('/api/comment/'.concat(commentId, '/like/', user.id), function(data) {
             if (data.like_flag) {
-                likeIcon = baseUrl.concat('/file/like_red.png');
+                likeIcon = baseUrl.concat('/file/like-red.png');
             } else {
-                likeIcon = baseUrl.concat('/file/like_grey.png');
+                likeIcon = baseUrl.concat('/file/like-grey.png');
             }
             $('#like-'.concat(data.comment_id)).attr('src', likeIcon);
             if (data.like_count > 0) {
-                $('#like-count-'.concat(data.comment_id)).val(data.like_count.toString().concat(' Like'));
+                $('#like-count-'.concat(data.comment_id)).text(data.like_count.toString().concat(' Like'));
             } else {
-                $('#like-count-'.concat(data.comment_id)).val('');
+                $('#like-count-'.concat(data.comment_id)).text('');
             }
         });
     } else {
