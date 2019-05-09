@@ -64,7 +64,10 @@
     function getLikeFlag() {
         $.getJSON('/api/post/'.concat(postId, '/like/').concat(user.id), function(data){
             data.forEach(like => {
-                $('#like-'.concat(like.comment_id)).attr('src', '{{ url("/file/like-red.png") }}');
+                var btnLike = $('#like-'.concat(like.comment_id));
+                btnLike.removeClass('main-text-hover');
+                btnLike.addClass('blue-text-hover');
+                btnLike.text('Bỏ Thích');
             });
         });
     }
