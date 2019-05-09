@@ -26,9 +26,9 @@ function renderCommentView(comment) {
     var baseUrl = window.location.origin;
     var likeIcon = '';
     if (comment.like_flag) {
-        likeIcon = baseUrl.concat('/file/like_red.png');
+        likeIcon = baseUrl.concat('/file/like-red.png');
     } else {
-        likeIcon = baseUrl.concat('/file/like_grey.png');
+        likeIcon = baseUrl.concat('/file/like-grey.png');
     }
     var html = '';
     html = html.concat('<div class="d-flex" style="width: 100%; padding: 10px;">', '<img id="user-avatar" src="', comment.user.image, '" style="width: 50px; height: 50px; margin: 0px !important; margin-right: 20px !important;">', '<div style="width: 100%; border-bottom: 1px solid #EEEEEE;">');
@@ -136,7 +136,7 @@ function viewMoreComments() {
     });
 }
 
-function likeClicked($commentId) {
+function likeClicked(commentId) {
     var baseUrl = window.location.origin;
     var likeIcon = '';
     
