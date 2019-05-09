@@ -117,8 +117,8 @@
                                 <p class="secondary-text" style="margin: 5px 0px 0px 0px;">{{$comment->created_at}}</p>
                                 <p class="main-text" style="margin: 5px 0px 0px 0px;">{{$comment->content}}</p>
                                 <div class="d-flex">
-                                    <img id="like-{{$comment->id}}" class="button" src="{{ url('file/like-grey.png') }}" onclick="likeClicked({{$comment->id}})" style="width: 22px; height: 22px; margin: 0px !important; margin-right: 30px !important;">
-                                    <img class="button" src="{{ url('file/reply.png') }}" style="width: 22px; height: 22px; margin: 0px !important;">                                
+                                    <b id="like-{{$comment->id}}" class="button main-text-hover" style="margin-right: 30px" onclick="likeClicked({{$comment->id}})">Thích</b>
+                                    <b id="reply-{{$comment->id}}" class="button main-text-hover">Trả lời</b>
                                 </div>
                             </div>  
                         </div>

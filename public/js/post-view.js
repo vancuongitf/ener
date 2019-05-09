@@ -23,13 +23,6 @@ $(document).ready( function() {
     $('#btn-commenting').hide();
 });
 function renderCommentView(comment) {
-    var baseUrl = window.location.origin;
-    var likeIcon = '';
-    if (comment.like_flag) {
-        likeIcon = baseUrl.concat('/file/like-red.png');
-    } else {
-        likeIcon = baseUrl.concat('/file/like-grey.png');
-    }
     var html = '';
     html = html.concat('<div class="d-flex" style="width: 100%; padding: 10px;">', '<img id="user-avatar" src="', comment.user.image, '" style="width: 50px; height: 50px; margin: 0px !important; margin-right: 20px !important;">', '<div style="width: 100%; border-bottom: 1px solid #EEEEEE;">');
     html = html.concat('<div class="d-flex justify-content-between">');
@@ -43,8 +36,12 @@ function renderCommentView(comment) {
     html = html.concat('<p class="secondary-text" style="margin: 5px 0px 0px 0px;">', comment.created_at,'</p>');
     html = html.concat('<p class="main-text" style="margin: 5px 0px 0px 0px;">', comment.content, '</p>');
     html = html.concat('<div class="d-flex">');
-    html = html.concat('<img id="like-{{$comment->id}}" class="button" src="', likeIcon,'" onclick="likeClicked()" style="width: 22px; height: 22px; margin: 0px !important; margin-right: 30px !important;">');
-    html = html.concat('<img class="button" src="', baseUrl.concat('/file/reply.png'),'" style="width: 22px; height: 22px; margin: 0px !important;">');
+    if (comment.like_flag) {
+        html = html.concat('<b id="like-{{$comment->id}}" class="button blue-text-hover" onclick="likeClicked()">Bỏ Thích</b>')
+    } else {
+        html = html.concat('<b id="like-{{$comment->id}}" class="button main-text-hover" onclick="likeClicked()">Thích</b>')
+    }
+    html = html.concat('<p id="reply-{{$comment->id}}" class="button main-text-hover" onclick="">Trả lời</p>')    
     html = html.concat('</div>');
     html = html.concat('</div></div>');
     return html;   
@@ -137,17 +134,18 @@ function viewMoreComments() {
 }
 
 function likeClicked(commentId) {
-    var baseUrl = window.location.origin;
-    var likeIcon = '';
-    
     if (user != null) {
         $.getJSON('/api/comment/'.concat(commentId, '/like/', user.id), function(data) {
+                var btnLike = $('#like-'.concat(data.comment_id));
             if (data.like_flag) {
-                likeIcon = baseUrl.concat('/file/like-red.png');
+                btnLike.removeClass('main-text-hover');
+                btnLike.addClass('blue-text-hover');
+                btnLike.text('Bỏ Thích');
             } else {
-                likeIcon = baseUrl.concat('/file/like-grey.png');
+                btnLike.removeClass('blue-text-hover');
+                btnLike.add('main-text-hover');
+                btnLike.text('Thích');
             }
-            $('#like-'.concat(data.comment_id)).attr('src', likeIcon);
             if (data.like_count > 0) {
                 $('#like-count-'.concat(data.comment_id)).text(data.like_count.toString().concat(' Like'));
             } else {
