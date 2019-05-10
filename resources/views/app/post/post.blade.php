@@ -55,7 +55,7 @@
 
     function commentSubmit() {
         if (user != null) {
-            addPostToComment($('#comment').val());
+            addCommentToPost($('#comment').val());
         } else {
             loginConfirm();
         }
@@ -82,7 +82,7 @@
             <p class="secondary-text">{{date("d-m-Y", strtotime($post->created_at))}} | {{$post->view_count}} Lượt xem</p>
             <b>{{$post->description}}</b> 
             {!!$post->content!!}
-        <div class="row">
+        <div class="row" style="margin: 0px !important;">
             <div class="dashed-bg" style="width: 100%; height: 10px;"></div>
             <div class="clear-css">
             </div>
@@ -103,12 +103,9 @@
                 </button>
                 <div id="comment-zone" class="row" style="width: 100%; margin: 0px; padding: 0px; margin-top: 20px;">
                     @foreach ($post->comment->comments as $comment)
-                        <script>
-                            commentIds.push({{$comment->id}});
-                        </script>
                         <div class="d-flex" style="width: 100%; padding: 10px;">
                             <img id="user-avatar" src="{{ $comment->user->image }}" style="width: 50px; height: 50px; margin: 0px !important; margin-right: 20px !important;">
-                            <div style="width: 100%; border-bottom: 1px solid #EEEEEE; padding-bottom: 10px;">
+                            <div style="width: 90%; border-bottom: 1px solid #EEEEEE; padding-bottom: 10px;">
                                 <div class="d-flex justify-content-between">
                                     <b>{{$comment->user->name}}</b>
                                     <b id="like-count-{{$comment->id}}" style="margin: 0px; color: blue;">
@@ -121,7 +118,21 @@
                                 <p class="main-text" style="margin: 5px 0px 0px 0px;">{{$comment->content}}</p>
                                 <div class="d-flex">
                                     <b id="like-{{$comment->id}}" class="button main-text-hover" style="margin-right: 30px" onclick="likeClicked({{$comment->id}})">Thích</b>
-                                    <b id="reply-{{$comment->id}}" class="button main-text-hover">Trả lời</b>
+                                    <b id="reply-{{$comment->id}}" class="button main-text-hover" onclick="replyClicked({{$comment->id}})">Trả lời</b>
+                                </div>
+                                <button id="loading-reply-{{$comment->id}}" class="btn btn-primary hidden" type="button" disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Loading...                        
+                                </button>
+                                <div id="reply-zone-{{$comment->id}}" class="row hidden" style="width: 100%; padding-left: 15px !important; box-sizing:border-box !important; margin: 0px !important; border-top: 1px solid #E0E0E0;">
+                                    <p id="old-replies-{{$comment->id}}" class="button secondary-text-hover hidden" style="width: 100%; margin-bottom: 0px;" onclick="oldReplies({{$comment->id}})">Trả lời cũ hơn</p>
+                                    <div id="child-replies-{{$comment->id}}" style="width: 100%;"></div>
+                                    <textarea name="" id="text-arera-reply-{{$comment->id}}" cols="1000" rows="2" style="margin-top: 10px;"></textarea>
+                                    <button id="btn-reply-{{$comment->id}}" class="btn btn-primary" style="margin-top: 10px;" onclick="replyComment({{$comment->id}})">Trả lời</button>
+                                    <button id="repling-{{$comment->id}}" class="btn btn-primary hidden" style="margin-top: 10px;" type="button" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Đang trả lời...                        
+                                    </button>
                                 </div>
                             </div>  
                         </div>
@@ -140,7 +151,7 @@
             <div class="dashed-bg" style="width: 100%; height: 10px; margin-bottom: 20px;"></div>
         </div>
         </div>
-        <div class="col-lg-4" style="padding: 0px 30px;">
+        <div class="col-lg-4" style="padding: 0px 30px; margin: 0px !important;">
                 @if (count($relativePosts)>0)
                 <h3 style="border-bottom: 2px solid red;">Bài viết cùng chủ đề:</h3>
                 @foreach ($relativePosts as $relativePost)

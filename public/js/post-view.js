@@ -47,9 +47,29 @@ function renderCommentView(comment) {
     return html;   
 }
 
-function addPostToComment(content) {
+function renderReplyView(reply) {
+    var html = '<div class="d-flex" style="width: 100%; border-bottom: 1px solid #e0e0e0; margin-top: 10px;">';
+    html = html.concat('<p id="reply-id" class="hidden">', reply.id, '</p>')
+    html = html.concat('<img src="', reply.user.image,'" style="width: 50px; height: 50px; margin: 0px !important; margin-right: 20px !important;">');
+    html = html.concat('<div style="left: 70px; width: 100%;">');
+    html = html.concat('<b>', reply.user.name,'</b>');
+    html = html.concat('<p class="secondary-text" style="margin-bottom: 0px;">', reply.created_at,'</p>');
+    html = html.concat('<p class="main-text" style="margin-bottom: 0px;">', reply.content,'</p>');
+    // htmlt = html.concat('<b id="like-{{$comment->id}}" class="button main-text-hover" style="margin-right: 30px" onclick="likeClicked({{$comment->id}})">1000 Like</b>');
+    html = html.concat('</div></div>');
+    return html;
+}
+
+function addCommentToPost(content) {
     if (isCommenting) {
         return;
+    }
+    content = content.trim();
+    if (content.length < 1) {
+        $.alert({
+            title: 'Thông Báo!',
+            content: 'Bình luận không được trống!',
+        });
     }
     isCommenting = true;
     $('#btn-comment').hide();
@@ -157,6 +177,83 @@ function likeClicked(commentId) {
     }
 }
 
+function replyClicked(commentId) {
+    if ($('#reply-'.concat(commentId)).hasClass('disable')) {
+        return;
+    }
+    if ($('#reply-zone-'.concat(commentId)).hasClass('hidden')) {
+        if ($('#loading-reply-'.concat(commentId)).hasClass('loadded')) { 
+            $('#reply-zone-'.concat(commentId)).removeClass('hidden'); 
+        } else {
+            $('#loading-reply-'.concat(commentId)).removeClass('hidden');
+            $('#reply-'.concat(commentId)).addClass('disable');            
+            loadReplies(commentId, 0);
+        }
+    } else {
+        $('#reply-zone-'.concat(commentId)).addClass('hidden');        
+    }
+}
+
+function replyComment(commentId) {
+    $('#btn-reply-'.concat(commentId)).addClass('hidden'); 
+    $('#repling-'.concat(commentId)).removeClass('hidden');
+    if (user != null) {
+        var content = $('#text-arera-reply-'.concat(commentId)).val().trim();
+        if (content.length > 0) {
+            $('#btn-reply-'.concat(commentId)).addClass('disable');
+            var childs = $('#child-replies-'.concat(commentId)).children().last();
+            var syncId = childs.find('#reply-id').text();
+            if (syncId.length < 1) {
+                syncId = '0';
+            }
+            jQuery.ajax({
+                type: 'POST',
+                url: '/api/comment/'.concat(commentId).concat('/reply/', user.id, '/', syncId),
+                crossDomain: true,
+                xhrFields: { 
+                    withCredentials: true
+                },
+                data: content,
+                success: function(msg) {
+                    $('#btn-reply-'.concat(commentId)).removeClass('hidden'); 
+                    $('#repling-'.concat(commentId)).addClass('hidden');
+                    var response = JSON.parse(msg);
+                    if (response.status == 'success') {
+                        var addRepliesView = '';
+                        response.replies.forEach(reply=> {
+                            addRepliesView = addRepliesView.concat(renderReplyView(reply));
+                        });
+                        addRepliesView = $('#child-replies-'.concat(commentId)).html().concat(addRepliesView);
+                        $('#child-replies-'.concat(commentId)).html(addRepliesView);
+                        $('#reply-zone-'.concat(commentId)).removeClass('hidden'); 
+                        $('#text-arera-reply-'.concat(commentId)).val('');
+                    } else {
+                        $.alert({
+                            title: 'Thông báo!',
+                            content: 'Xãy ra lỗi! Vui lòng thử lại sau!',
+                        });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#btn-reply-'.concat(commentId)).removeClass('hidden'); 
+                    $('#repling-'.concat(commentId)).addClass('hidden');
+                    $.alert({
+                        title: 'Thông báo!',
+                        content: 'Xãy ra lỗi! Vui lòng thử lại sau!',
+                    });
+                }
+            });
+        } else {
+            $.alert({
+                title: 'Thông Báo!',
+                content: 'Bình luận không được trống!',
+            });
+        }
+    } else {
+        loginConfirm();
+    }
+}
+
 function loginConfirm() {
     $.confirm({
         title: 'Thông Báo!',
@@ -167,6 +264,74 @@ function loginConfirm() {
             },
             cancel: function () {
             }
+        }
+    });
+}
+
+function loadReplies(commentId, lastId) {
+    jQuery.ajax({
+        type: 'GET',
+        url: '/api/comment/'.concat(commentId).concat('/replies/').concat(lastId),
+        crossDomain: true,
+        xhrFields: { 
+            withCredentials: true
+        },
+        success: function(msg) {
+            $('#loading-reply-'.concat(commentId)).addClass('loadded');  
+            $('#loading-reply-'.concat(commentId)).addClass('hidden');              
+            $('#reply-'.concat(commentId)).removeClass('disable');
+            var response = JSON.parse(msg);
+            if (response.next_page_flag) {
+                $('#old-replies-'.concat(commentId)).removeClass('hidden');
+            } else {
+                if (!$('#old-replies-'.concat(commentId)).hasClass('hidden')) {
+                    $('#old-replies-'.concat(commentId)).addClass('hidden');            
+                }
+            }
+            var addRepliesView = '';
+            response.replies.forEach(reply=> {
+                addRepliesView = addRepliesView.concat(renderReplyView(reply));
+            });
+            addRepliesView = addRepliesView.concat($('#child-replies-'.concat(commentId)).html());
+            $('#child-replies-'.concat(commentId)).html(addRepliesView);
+            $('#reply-zone-'.concat(commentId)).removeClass('hidden'); 
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $('#reply-'.concat(commentId)).removeClass('disable');
+            $('#loading-reply-'.concat(commentId)).addClass('hidden');              
+        }
+    });
+}
+
+function oldReplies(commentId) {
+    var childs = $('#child-replies-'.concat(commentId)).children().first();
+    var syncId = childs.find('#reply-id').text();
+    $('#old-replies-'.concat(commentId)).removeClass('hidden');
+    jQuery.ajax({
+        type: 'GET',
+        url: '/api/comment/'.concat(commentId).concat('/replies/').concat(syncId),
+        crossDomain: true,
+        xhrFields: { 
+            withCredentials: true
+        },
+        success: function(msg) {
+            var response = JSON.parse(msg);
+            if (response.next_page_flag) {
+                $('#old-replies-'.concat(commentId)).removeClass('hidden');
+            } else {
+                if (!$('#old-replies-'.concat(commentId)).hasClass('hidden')) {
+                    $('#old-replies-'.concat(commentId)).addClass('hidden');            
+                }
+            }
+            var addRepliesView = '';
+            response.replies.forEach(reply=> {
+                addRepliesView = addRepliesView.concat(renderReplyView(reply));
+            });
+            addRepliesView = addRepliesView.concat($('#child-replies-'.concat(commentId)).html());
+            $('#child-replies-'.concat(commentId)).html(addRepliesView);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $('#old-replies-'.concat(commentId)).removeClass('hidden');
         }
     });
 }

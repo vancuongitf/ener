@@ -177,6 +177,7 @@ class PostController extends Controller {
         }
     }
 
+    // Delete
     public function addCommentToPost(Request $request) {
         $commentBody = json_decode($request->getContent());
         $comment = Comment::create([
@@ -208,6 +209,7 @@ class PostController extends Controller {
         return json_encode($response);
     }
 
+    // Delete
     public function getPostComments() {
         $postId = Route::current()->parameter('postId');
         $syncId = Route::current()->parameter('syncId');
@@ -259,6 +261,7 @@ class PostController extends Controller {
         return json_encode($response);
     }
 
+    // Delete
     public function getLikeFlag() {
         $postId = Route::current()->parameter('postId');
         $userId = Route::current()->parameter('userId');
@@ -274,6 +277,7 @@ class PostController extends Controller {
         return json_encode($rs);
     }
 
+    // Delete
     public function likeComment(Request $request) {
         $commentId = Route::current()->parameter('id');
         $userId = Route::current()->parameter('userId');

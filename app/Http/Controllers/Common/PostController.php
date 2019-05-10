@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Post;
 use App\Model\Comment;
 use App\Model\CommentLike;
+use App\Model\CommentReply;
 use App\Model\GoogleUser;
 use App\Model\Tag\PostTag;
 use App\Model\Tag\TagLevel1;
@@ -30,7 +31,7 @@ class PostController extends Controller {
     }
 
     public function getHome() {
-        $posts = Post::where('is_published', 1)->get();
+        $posts = Post::where('is_published', 1)->orderBy('created_at', 'desc')->get();
         foreach ($posts as $post) {
             $post->view_count = PostController::getPostViewCount($post->id, $post->created_at);
         }
@@ -110,6 +111,192 @@ class PostController extends Controller {
                 'status' => 'fail'
             ])); 
         }
+    }
+
+    public function getOldPostComments() {
+        $postId = Route::current()->parameter('postId');
+        $syncId = Route::current()->parameter('syncId');
+        $userId = Route::current()->parameter('userId');
+        if ($syncId < 0) {
+            $comments = Comment::where('post_id', $postId)
+            ->orderBy('created_at', 'desc')
+            ->take(11)
+            ->get();
+        } else {
+            $comments = Comment::where('post_id', $postId)
+            ->where('id', '<', $syncId)
+            ->orderBy('created_at', 'desc')
+            ->take(11)
+            ->get();
+        }
+        $response = new StatusResponse([
+            'status' => 'success'
+        ]);
+        $cms = array();
+        for ($i=0; $i < 10 && $i < count($comments); $i++) { 
+            array_push($cms, $comments[$i]);
+        }
+        if (count($comments) > 10) {
+            $response->next_page_flag = true;
+        } else {
+            $response->next_page_flag = false;
+        }
+        foreach($cms as $comment) {
+            $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
+            $comment->like_count = CommentLike::where('comment_id', $comment->id)->get()->count();
+            if ($userId != null) {
+                $comment->like_flag = CommentLike::where('comment_id', $comment->id)
+                    ->where('user_google_id', $userId)
+                    ->first() != null;
+            } else {
+                $comment->like_flag = false;
+            }
+        }
+        if(count($cms) > 0) {
+            $response->max_id = $cms[0]->id;
+            $response->min_id = $cms[count($cms) - 1]->id;
+            $response->comments = $cms;
+        } else {
+            $response->max_id = -1;
+            $response->min_id = $syncId;
+            $response->comments = array();
+        }
+        return json_encode($response);
+    }
+
+    public function addCommentToPost(Request $request) {
+        $commentBody = json_decode($request->getContent());
+        $comment = Comment::create([
+            'post_id' => $commentBody->post_id,
+            'user_google_id' => $commentBody->user_google_id,
+            'content' => $commentBody->content
+        ]);
+        $comments = Comment::where('post_id', $commentBody->post_id)
+            ->where('id', '>', $commentBody->max_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        if ($comments == null) {
+            $comments = array();
+        }
+        foreach($comments as $comment) {
+            $comment->user = GoogleUser::where('id', $comment->user_google_id)->first();
+        }
+        if ($comment != null) {
+            $response = new StatusResponse([
+                $status = 'success'
+            ]);
+        } else {
+            $response = new StatusResponse([
+                $status = 'fail'
+            ]);
+        }
+        $response->comments = $comments;
+        $response->max_id = $comments[0]->id;
+        return json_encode($response);
+    }
+
+    public function getLikeFlag() {
+        $postId = Route::current()->parameter('postId');
+        $userId = Route::current()->parameter('userId');
+        $ids = array();
+        $commentIds = DB::table('comments')->select('id')->where('post_id', $postId)->get();
+        foreach ($commentIds as $commentId) {
+            array_push($ids, $commentId->id);
+        }
+        $rs = DB::table('comment_like')
+            ->where('user_google_id', $userId)
+            ->whereIn('comment_id', $ids)
+            ->get();
+        return json_encode($rs);
+    }
+
+    public function likeComment(Request $request) {
+        $commentId = Route::current()->parameter('id');
+        $userId = Route::current()->parameter('userId');
+        $deleteLike = CommentLike::where('comment_id', $commentId)
+            ->where('user_google_id', $userId)
+            ->delete();
+        $response = new StatusResponse([
+            'status' => 'success'
+        ]);
+        $response->comment_id = $commentId;
+        if ($deleteLike == 1) {
+            $response->like_flag = false;
+        } else {
+            CommentLike::create([
+                'comment_id' => $commentId,
+                'user_google_id' => $userId
+            ]);
+            $like = CommentLike::where('comment_id', $commentId)
+                ->where('user_google_id', $userId)
+                ->first();
+            $response->like_flag = $like != null;
+        }
+        $response->like_count = count(CommentLike::where('comment_id', $commentId)->get());
+        return json_encode($response);
+    }
+
+    public function getCommentReplies() {
+        $response = new StatusResponse([
+            'status' => 'success'
+        ]);
+        $response->next_page_flag = false;
+        $commentId = (int)Route::current()->parameter('id');
+        $syncId = (int)Route::current()->parameter('syncId');
+        if ($syncId < 1) {
+            $replies = CommentReply::where('comment_id', $commentId)
+            ->orderBy('created_at', 'DESC')
+            ->take(6)
+            ->get();
+        } else {
+            $replies = CommentReply::where('comment_id', $commentId)
+            ->where('id', '<', $syncId)
+            ->orderBy('created_at', 'DESC')
+            ->take(6)
+            ->get();
+        }
+        
+        if ($replies->count() > 5) {
+            $response->next_page_flag = true;
+        }
+        $repliesRs = array();
+        $response->comment_id = $commentId;
+        for ($i = $replies->count() - 1; $i > -1; $i--) {
+            if ($i > 5) {
+                continue;
+            }
+            $replies[$i]->user = GoogleUser::where('id', $replies[$i]->user_google_id)->first();
+            array_push($repliesRs, $replies[$i]);
+        }
+        $response->replies = $repliesRs;
+        return json_encode($response);
+    }
+
+    public function replyComment(Request $request) {
+        $response = new StatusResponse([
+            'status' => 'fail'
+        ]);
+        $commentId = (int)Route::current()->parameter('id');
+        $userId = (int)Route::current()->parameter('userId');
+        $syncId = (int)Route::current()->parameter('syncId');
+        $content = $request->getContent();
+        $reply = CommentReply::create([
+            'comment_id' => $commentId,
+            'user_google_id' => $userId,
+            'content' => $content
+        ]);
+        if ($reply != null) {
+            $response->status = 'success';
+        }
+        $newComments = CommentReply::where('id', '>', $syncId)
+            ->where('comment_id', $commentId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        foreach($newComments as $newReply) {
+            $newReply->user = GoogleUser::where('id', $newReply->user_google_id)->first();
+        }
+        $response->replies = $newComments;
+        return json_encode($response);
     }
 
     private static function getCategoryPostsWithPage($id, $level, $page) {

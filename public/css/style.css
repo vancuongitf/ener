@@ -199,3 +199,27 @@ textarea:focus, input:focus{
 .button {
     cursor: pointer;
 }
+
+.row {
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+.loadded {
+
+}
+
+.disable {
+    
+}
+
+.reply-id {
+    
+}

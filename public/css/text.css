@@ -14,6 +14,14 @@
     color: gray;    
 }
 
+.secondary-text-hover {
+    color: gray;
+}
+
+.secondary-text-hover:hover {
+    color: black;
+}
+
 .white-text {
     color: white;
 }
@@ -36,6 +44,10 @@
 
 .blue-text-hover:hover {
     color: gray;
+}
+
+.blue-text {
+    color: blue;
 }
 
 .header-text {
