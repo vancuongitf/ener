@@ -195,9 +195,9 @@ function replyClicked(commentId) {
 }
 
 function replyComment(commentId) {
-    $('#btn-reply-'.concat(commentId)).addClass('hidden'); 
-    $('#repling-'.concat(commentId)).removeClass('hidden');
     if (user != null) {
+        $('#btn-reply-'.concat(commentId)).addClass('hidden'); 
+        $('#repling-'.concat(commentId)).removeClass('hidden');
         var content = $('#text-arera-reply-'.concat(commentId)).val().trim();
         if (content.length > 0) {
             $('#btn-reply-'.concat(commentId)).addClass('disable');
