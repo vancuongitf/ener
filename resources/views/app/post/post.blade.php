@@ -14,6 +14,10 @@
         margin-left: auto !important; 
         margin-right: auto !important;
     }
+
+    .post-content span {
+        line-height: 1.5 !important;
+    }
 </style>
 @section('include-script')
     <script src="{{url('js/post-view.js')}}"></script>
@@ -23,11 +27,22 @@
     {{ $post->name }}
 @endsection
 @section('meta-data')
-    <meta property="og:image" content="{{url('file/ener.png')}}"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="http://ener.vn"/>
-    <meta property="og:title" content="Nơi Giúp Bạn Hoàn Thiện Bản Thân Mình"/>
-    <meta property="og:description" content="skajdh skjdha sdkjasbd askdbas kdas dkjas dkas dkjas dkjas dkjas dj asjkd askjd askjd jkas dkjas dkjasd kasd kajs"/> 
+    <meta name="description" content="{{$post->description}}" />
+    <meta name="keywords" content="{{$post->key_words}}" />
+    <meta name="news_keywords" content="{{$post->new_keywords}}" />
+    <link rel="canonical" href="{{url('/post/' . $post->route)}}" />
+    <meta name="robots" content="index,follow,noodp" />
+    <meta name="robots" content="noarchive">
+    <meta property="og:site_name" content="Ener VN - Phát triển bản thân" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="fb:pages" content="1735750099904628" />
+	<meta property="og:title" itemprop="name" content="{{$post->name}}" />    
+	<meta property="og:url" itemprop="url" content="{{url('/post/' . $post->route)}}" />
+    <meta property="og:description" content="{{$post->description}}" />
+    <meta content="{{url('/file_storage/' . $post->image)}}" property="og:image" itemprop="thumbnailUrl" />
+    <meta name="pubdate" itemprop="datePublished" content="{{$post->created_at}}"/>
+    <meta itemprop="dateModified" content="{{$post->updated_at}}" />
 @endsection
 @section('left-zone')
     <div class="col-lg-2 ads-side-zone" style="box-sizing:border-box; padding: 0px; margin: 0px; padding: 10px;">

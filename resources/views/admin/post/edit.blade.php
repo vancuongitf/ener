@@ -63,6 +63,8 @@
                 $('#title').val("{{$post->name}}");
                 $('#route').val("{{$post->route}}");
                 $('#description').val("{{$post->description}}");
+                $('#key_words').val("{{$post->key_words}}");
+                $('#new_key_words').val("{{$post->new_key_words}}");
                 var str = '<?php echo $post->content;?>';
                 $('#summernote').summernote('code', str);
                 if ('{{$post->image}}'.length > 0) {
@@ -131,6 +133,12 @@
                         <img id="img_create_post_image" style="max-width:100%; margin-top: 20px;" src="" alt="">
                         <div class="form-group">
                             <textarea class="form-control" style="margin-top:20px;" name="description" id="description" cols="30" rows="5" placeholder="Input post's description">{{old('description')}}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <input id="key_words" name="key_words" type="text" placeholder="Input post's key words" class="form-control" value="{{old('key_words')}}">                                    
+                        </div>
+                        <div class="form-group">
+                            <input id="new_key_words" name="new_key_words" type="text" placeholder="Input post's key words" class="form-control" value="{{old('new_key_words')}}">                                    
                         </div>
                         <div class="form-group">
                         <textarea name="summernote" id="summernote" cols="30" rows="10" class="form-control" placeholder="Input post's content">{{old('summernote')}}</textarea>                                    

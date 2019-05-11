@@ -45,6 +45,12 @@
                             <textarea class="form-control" name="description" id="description" cols="30" rows="5" placeholder="Input post's description">{{old('description')}}</textarea>
                         </div>
                         <div class="form-group">
+                            <input id="key_words" name="key_words" type="text" placeholder="Input post's key words" class="form-control" value="{{old('key_words')}}">                                    
+                        </div>
+                        <div class="form-group">
+                            <input id="new_key_words" name="new_key_words" type="text" placeholder="Input post's key words" class="form-control" value="{{old('new_key_words')}}">                                    
+                        </div>
+                        <div class="form-group">
                         <textarea name="summernote" style="margin-top:20px;" id="summernote" cols="30" rows="10" class="form-control" placeholder="Input post's content">{{old('summernote')}}</textarea>                                    
                         @if ($errors->first('summernote'))
                             <p class="red-text" style="font-size: 1rem;">{{$errors->first('summernote')}}</p>

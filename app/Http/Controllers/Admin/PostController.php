@@ -36,6 +36,8 @@ class PostController extends Controller {
             'name_search' => $request->get('name_search'),
             'description' => $description,
             'description_search' => $request->get('description_search'),
+            'key_words' => $request->get('key_words'),
+            'new_key_words' => $request->get('new_key_words'),
             'image' => $image,
             'content' => $html,
             'route' =>  $route,
@@ -87,6 +89,8 @@ class PostController extends Controller {
                 'route' => $request->input('route'),
                 'description' => $request->input('description'),
                 'description_search' => $request->get('description_search'),
+                'key_words' => $request->get('key_words'),
+                'new_key_words' => $request->get('new_key_words'),
                 'content' => $request->input('summernote'),
                 'image' => $newImage,
                 'is_published' => $request->get('publish_now')
