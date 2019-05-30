@@ -8,6 +8,8 @@ use App\Model\Tag\Tag;
 use App\Model\Tag\TagLevel1;
 use App\Model\Tag\TagLevel2;
 use App\Model\Tag\TagLevel3;
+use App\Model\Tag\PostTag;
+use App\Model\Response\StatusResponse;
 use App\Http\Requests\Admin\Tag\CreateTagRequest;
 use App\Http\Requests\Admin\Tag\UpdateTagRequest;
 use Route;
@@ -95,7 +97,19 @@ class TagController extends Controller {
     }
 
     public function deleteTag() {
-
+        $level = (int)Route::current()->parameter('level');
+        $id = (int)Route::current()->parameter('id');
+        if ($this->removeTag($level, $id)) {
+            return json_encode(new StatusResponse([
+                    'status' => 'success'
+                ]
+            ));
+        } else {
+            return json_encode(new StatusResponse([
+                    'status' => 'fail'
+                ]
+            ));
+        }
     }
 
     public function getTagChilds() {
@@ -115,5 +129,31 @@ class TagController extends Controller {
             return json_encode($tag->getChilds());
         }
         return json_encode(array());
+    }
+
+    private function removeTag($level, $id) {
+        switch($level) {
+            case 1:
+                $childs = TagLevel2::where('tag_level_1_id', $id)->get();
+                foreach ($childs as $tag2) {
+                    $this->removeTag(2, $tag2->id);
+                }
+                PostTag::where('tag_level_1_id', $id)->delete();
+                return TagLevel1::where('id', $id)->delete();
+                break;
+            case 2:
+                $childs = TagLevel3::where('tag_level_2_id', $id)->get();
+                foreach ($childs as $tag3) {
+                    $this->removeTag(3, $tag3->id);
+                }
+                PostTag::where('tag_level_2_id', $id)->delete();
+                return TagLevel2::where('id', $id)->delete();
+                break;
+            
+            case 3:
+                PostTag::where('tag_level_3_id', $id)->delete();
+                return TagLevel3::where('id', $id)->delete();                
+                break;
+        }
     }
 }

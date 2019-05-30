@@ -17,7 +17,41 @@
         }
 
         function btnDeleteClicked() {
-            
+            $.alert({
+                title: 'Notification',
+                content: 'Do you want delete this tag?',
+                buttons: {
+                    heyThere: {
+                        text: 'OK', // text for button
+                        btnClass: 'btn-blue', // class for the button
+                        keys: ['enter'], // keyboard event for button
+                        isHidden: false, // initially not hidden
+                        isDisabled: false, // initially not disabled
+                        action: function (heyThereButton) {
+                            var apiUrl = '{{ "/api/admin/tag/" . $tag->level . "/" . $tag->id}}';
+                            $.ajax({
+                                url: apiUrl,
+                                type: 'DELETE',
+                                success: function(result) {
+                                    var response = JSON.parse(result);
+                                    if (response.status = "success") {
+                                        myAlert('Notification!', 'Delete tag success!', function() {
+                                            window.location.href = '{{ url("admin/tag") }}';
+                                        });
+                                    } else {
+                                        myAlert('Thông báo!', 'Xoá tag thất bại. Vui lòng thử lại sau.', function() {});
+                                    }
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    myAlert('Notification!', 'Delete tag fail. Please try again!', function() {});
+                                }
+                            });
+                        }
+                    },
+                    cancel: function () {
+                    },
+                }
+            });
         }
     </script>
 @endsection
