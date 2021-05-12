@@ -24,6 +24,6 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
-        "codemirror": "^5.44.0"
+        "codemirror": "^5.58.2"
     }
 }
